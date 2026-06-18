@@ -1,0 +1,454 @@
+✅ FTP
+Ports: 21 (و أحيانًا 20 لو Active Mode)
+
+Tools used:
+===========
+
+nmap --scripts => frp-anon , ftp-brute
+
+ftp  => ftp -? to show the ftp help menu
+
+hydra
+
+nc
+
+python (لبعض الاستغلالات اليدوية)
+
+searchsploit (لو السيرفر أو الإصدارات فيها ثغرات)
+
+Examples:
+
+nmap -p 21 --script ftp-anon , ftp-bounce , ftp-syst <ip>
+
+ftp <ip>
+لو لقيت 
+anonymous login شغال:
+
+ftp
+open <ip>
+user: anonymous
+password: anonymous
+لو لقيت ملف مهم:
+get secret.txt
+
+_______________________________________________________
+✅ HTTP / HTTPS
+Ports: 80, 443, 8080, 8000, 8443
+
+Tools used:
+===========
+
+nmap --script  => banner , http-enum
+
+whatweb
+
+dirb / gobuster / feroxbuster
+
+nikto
+
+burpsuite
+
+curl
+
+hydra (لو فيه صفحة login)
+
+wfuzz
+
+ffuf
+
+Examples:
+nmap -p 80,443 --script http-enum,http-title <ip>
+
+whatweb http://<ip>
+
+gobuster dir -u http://<ip> -w /usr/share/wordlists/dirb/common.txt
+
+curl -I http://<ip>
+
+لو لقيت صفحة login:
+جرّب default creds
+جرّب brute-force:
+hydra -l admin -P rockyou.txt <ip> http-post-form "/login.php:user=^USER^&pass=^PASS^:Invalid"
+
+
+_______________________________________________________
+
+✅ SSH
+Port: 22 ,2220
+
+Tools used:
+
+nmap 
+
+hydra
+
+ssh
+
+searchsploit
+
+Examples:
+
+nmap -p 22 --script ssh2-enum-algos,ssh-hostkey <ip>
+
+ssh user@<ip or host>
+
+hydra -l root -P rockyou.txt ssh://<ip>
+
+لو لقيت 
+user 
+من 
+enum4linux أو ftp أو NFS 
+
+جربه على 
+SSH
+_______________________________________________________
+
+✅ NFS
+Ports: 111, 2049
+
+Tools used:
+
+nmap
+
+showmount
+
+mount
+
+rpcinfo
+
+tcpdump / wireshark
+
+Examples:
+
+showmount -e <ip>
+
+
+mount -t nfs <ip>:/shared_folder /mnt/nfs
+
+لو مجلد فاضي بعد الـ mount:
+chown kali:kali /mnt/nfs
+ls -la /mnt/nfs
+==================================================
+rpcinfo -p <ip>
+
+rpcinfo → يعرض معلومات عن خدمات RPC.
+
+-p → يعرض تفاصيل كل خدمة مسجلة + البورت + البروتوكول.
+=========================================
+
+
+
+
+1. NFS (Network File System) + Data Interception + DoS
+الفكرة
+
+استغلال خدمة NFS للوصول للملفات الحساسة، واعتراض البيانات المتنقلة على الشبكة لتحليلها، بالإضافة إلى اختبار قدرة السيرفر على التحمل من خلال هجمات DoS.
+
+الأدوات
+
+NFS: nmap, showmount, mount, umount
+
+اعتراض البيانات: tcpdump, Wireshark
+
+هجمات DoS: hping3, slowloris, وأدوات مثل LOIC (للاختبار فقط)
+
+الخطوات
+
+أولاً – استغلال NFS
+
+اكتشاف الخدمة عبر nmap على البورتات 111 و2049.
+
+عرض المجلدات المشتركة:
+
+showmount -e <IP>
+
+
+ربط المجلد للوصول إلى الملفات:
+
+mount -t nfs <IP>:<share> /mnt/nfs
+
+
+نسخ وتحليل أي ملفات حساسة (مثل مفاتيح SSH أو بيانات نصية).
+
+فصل المجلد بعد الانتهاء بـ umount.
+
+ثانياً – اعتراض وتحليل البيانات (Packet Sniffing)
+
+تشغيل tcpdump على واجهة الشبكة:
+
+tcpdump -i eth0 -w capture.pcap
+
+
+تحليل الحزم باستخدام Wireshark.
+
+البحث عن بيانات حساسة مثل كلمات مرور أو نصوص غير مشفرة.
+
+توثيق النتائج لتوضيح نقاط الضعف.
+
+ثالثاً – اختبار التحمل (DoS)
+
+تحديد الهدف (IP والبورت) باستخدام nmap.
+
+تشغيل أداة الإغراق:
+
+hping3 -S --flood -V <IP> -p <PORT>
+
+
+مراقبة تأثير الهجوم وملاحظة بطء أو توقف الخدمة.
+
+إيقاف الهجوم وتسجيل النتائج لتحليل مدى التحمل.
+_______________________________________________________
+✅ SMB
+Ports: 139, 445 (وأحيانًا 137)
+
+Tools used:
+
+nmap --scripts => smb-enum-users
+
+smbclient => to connect to smb share
+
+enum4linux
+
+crackmapexec
+
+smbmap
+
+impacket-smbserver
+
+Example:
+
+enum4linux -a <ip>
+
+smbclient -L //<ip>/ -N => TO Connect to the SMB share 
+
+smbclient //<ip>/sharename -N
+
+✅ ملحوظة عامة:
+لو لقيت 
+user
+ (من أي service) → جربه في:
+
+SSH
+
+SMB
+
+FTP
+
+HTTP login
+
+
+_______________________________________________________
+✅ Telnet
+Port: 23
+
+Tools used:
+
+nmap
+
+telnet
+
+hydra
+
+netcat (nc)
+
+searchsploit (لو فيه إصدار قديم)
+
+Examples:
+nmap -p 23 <ip>
+
+telnet <ip>
+لو السيرفر بيطلب يوزر وباسورد، جرّب:
+
+admin / admin
+
+root / toor
+
+hydra:
+hydra -l root -P rockyou.txt <ip> telnet
+✅ لو دخلت بنجاح، غالبًا السيرفر قديم وسهل تكسيره أو تنفيذه لأوامر من غير صلاحيات قوية.
+
+
+
+_______________________________________________________
+✅ SNMP
+Port: 161 (UDP)
+
+Tools used:
+
+nmap
+
+snmpwalk
+
+onesixtyone
+
+snmp-check
+
+snmpenum
+
+Examples:
+nmap -sU -p 161 --script=snmp-info <ip>
+
+onesixtyone -c /usr/share/seclists/Discovery/SNMP/snmp-onesixtyone.txt <ip>
+
+snmpwalk -v2c -c public <ip>
+-c public: دي اسم الـ community الشائع، لو شغال بيها تقدر تسحب داتا كتير.
+
+🔍 ممكن تجيب:
+
+اسم الجهاز (hostname)
+
+إصدارات السوفتوير
+
+user accounts
+
+معلومات network interfaces
+
+running processes
+
+routing table
+
+
+
+
+
+ChatGPT said:
+
+أكيد، بص يا سيدي، SNMP اختصار لـ Simple Network Management Protocol، وده بروتوكول بيستخدم لإدارة ومراقبة الأجهزة على الشبكة زي:
+
+الراوترات (Routers)
+
+السويتشات (Switches)
+
+السيرفرات (Servers)
+
+الطابعات (Printers)
+
+الأجهزة الذكية (IoT devices)
+
+أهم النقاط عن SNMP
+1️⃣ الغرض منه
+
+بيجمع معلومات عن حالة الأجهزة: CPU, RAM, interfaces, errors.
+
+ممكن كمان يتحكم في الإعدادات (لو عندك صلاحيات).
+
+2️⃣ إصدارات SNMP
+
+SNMP v1: قديم وغير آمن (Plaintext).
+
+SNMP v2c: أسرع شوية لكنه برضو غير آمن (لسه Plaintext).
+
+SNMP v3: أحدث وأأمن، بيدعم التشفير والمصادقة.
+
+3️⃣ الـ Community Strings
+
+أشبه بباسوورد بسيط بيحدد صلاحياتك.
+
+public (للقراءة فقط - Read Only)
+
+private (قراءة وكتابة - Read/Write)
+
+4️⃣ البورتات
+
+بيشتغل على:
+
+UDP 161: للاستعلامات العادية.
+
+UDP 162: للـ Traps (التنبيهات اللي يرسلها الجهاز لو فيه مشكلة).
+
+5️⃣ أدوات لفحص SNMP
+
+nmap:
+
+nmap -p 161 --script snmp-info <IP>
+
+
+snmpwalk:
+
+snmpwalk -v2c -c public <IP>
+
+
+snmp-check:
+
+snmp-check <IP>
+
+6️⃣ في الاختراق
+
+لو لقيت SNMP شغال بـ community string ضعيفة (زي public):
+
+ممكن تجيب معلومات حساسة عن الشبكة.
+
+أحياناً توصلك لنسخ IOS، أسماء مستخدمين، وحتى كلمات سر مخزنة
+_______________________________________________________
+✅ SMTP
+Port: 25 (TCP)
+
+Tools used:
+
+telnet
+
+nc
+
+nmap --script smtp-*
+
+openssl s_client
+
+msfconsol
+
+Examples / Commands:
+
+nmap -p 25 --script smtp-open-relay,smtp-enum-users <ip>
+telnet <ip> 25
+nc <ip> 25
+openssl s_client -starttls smtp -connect <ip>:25
+
+
+الاتصال بالسيرفر: telnet <ip> 25 أو nc <ip> 25
+
+فحص إمكانية Open Relay: تجربة إرسال إيميل من عنوان خارجي
+
+User Enumeration:
+
+VRFY <username>
+RCPT TO:<username@example.com>
+
+
+اختبار التشفير: استخدام openssl s_client لمعرفة إذا السيرفر يدعم TLS/SSL
+
+🔍 ممكن تجيب:
+
+تحقق من إمكانية إرسال الإيميلات لأي شخص (Open Relay)
+
+معرفة أسماء المستخدمين الصحيحة (User Enumeration)
+
+بيانات الإيميلات والنطاقات المتاحة
+
+التحقق من قوة التشفير وحماية السيرفر
+
+استغلال الثغرات في نسخ معينة (مثل OpenSMTPD CVE-2020-7247)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+| Protocol       | Ports                               | Tools & Usage                                                                             |
+| -------------- | ----------------------------------- | ----------------------------------------------------------------------------------------- |
+| **SMB**        | `139`, `445` (أحيانًا `137`)        | `enum4linux`, `smbclient`, `nmap`, `smbmap`, `crackmapexec`<br>مثال: `enum4linux -a <ip>` |
+| **FTP**        | `21` (وأحيانًا `20`)                | `ftp`, `nmap`, `hydra`, `nc`<br>مثال: `ftp <ip>`                                          |
+| **HTTP/HTTPS** | `80`, `443`, `8080`, `8000`, `8443` | `gobuster`, `whatweb`, `nikto`, `curl`, `hydra`<br>مثال: `whatweb http://<ip>`            |
+| **SSH**        | `22`                                | `ssh`, `nmap`, `hydra`<br>مثال: `ssh user@<ip>`                                           |
+| **NFS**        | `111`, `2049`                       | `showmount`, `mount`, `rpcinfo`, `tcpdump`, `wireshark`<br>مثال: `showmount -e <ip>`      |
+| **Telnet**     | `23`                                | `telnet`, `nmap`, `hydra`, `nc`<br>مثال: `telnet <ip>`                                    |
+| **SNMP**       | `161/UDP`                           | `snmpwalk`, `onesixtyone`, `snmp-check`<br>مثال: `snmpwalk -v2c -c public <ip>`           |
+
+

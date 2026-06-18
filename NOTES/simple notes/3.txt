@@ -1,0 +1,29 @@
+# info@cybercampsplus.com
+# cybercampsplus@gmail.com
+# ahmed.codercamps@gmail.com
+----------------------------
+# kali linux
+	- locate
+	[sudo updatedb]
+	[locate ahmed.txt]
+	- chmod
+		# Symbolic mode
+		[ u g o ]
+		[ + - ]
+		[ r w x ]
+		# Absoulte Mode
+		[ r w x ]
+		[ 4 2 1 ]
+	- find
+	[ find / -type f -name ahmed.txt 2>/dev/null ]
+	[ find / -type f -perm -04000 -ls 2>/dev/null ]
+	[ find / -type f -perm -02000 -ls 2>/dev/null ]
+	- redirecting
+	- piping
+----------------------------
+# network fundmental
+# introdution to ethical hacking
+----------------------------
+# Adopting the hacker mindset محاكاة لعقل الهكر
+
+# CVE-2017-0148

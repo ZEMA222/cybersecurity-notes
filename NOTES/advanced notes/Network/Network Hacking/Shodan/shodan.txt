@@ -1,0 +1,1 @@
+Shodan and cansys are a web tools used to do port scanning on ips and gives very useful info. just search with the ip u need to know about or the port 

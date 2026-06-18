@@ -1,0 +1,26 @@
+				Metasploit part 3 +201003425890`
+
+- sudo command is important 
+# service postgresql status
+# service postgresql start
+# systemctl enable postgresql 
+# msfdb init
+# msfconsole
+msf> ?
+msf> services 	
+msf> hosts
+msf> hosts --help 
+msf> workspace -a xyz  => to add new workspace
+msf> workspace 
+msf> workspace -d xyz  => to delete workspace
+msf> workspace --help 
+msf> jobs 
+msf> search --help 
+msf> search auxiliary 
+msf> search scanner 
+msf> search scanner -S apache 	=> -S string 
+msf> search cve:2024 type:exploit
+msf> info exploit/windows/smb/smb_doublepulsar_rce 
+
+
+

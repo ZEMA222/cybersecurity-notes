@@ -1,0 +1,32 @@
+# المكنسة
+-------
+# Footprinting:
+	- google dorks
+	- netcraft
+	- theHarvester
+	- photon
+	- httrack
+	- emailtrackpro
+	- whois
+	- securitytrails
+	- traceroute && tracert
+	- recon-ng
+--------------------------------
+# Scanning Network:
+	- Host Discovery using nmap && zenmap
+	- Port Scanning using nmap && zenmap
+	- NSE
+	- firewall evasion using nmap && zenmap
+	- metasploit
+--------------------------------
+# Enumeration:
+	- netbios
+	- snmp
+	- smtp
+ 
+--------------------------------
+# https://mega.nz/file/hIkgmYoJ#U-RKXKW8F8hrBRbuHQ-hA5Oyk1TTdCdPYKSvjUVDq0o
+
+
+
+

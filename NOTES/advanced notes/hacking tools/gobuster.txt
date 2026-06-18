@@ -1,0 +1,102 @@
+ممتاز يا نجم، خلينا نديك شرح شامل ومبسّط عن Gobuster وأوامره الأساسية، وبالذات الفرق بين dir و dns ومتى تستخدم كل واحدة.
+
+🦍 ما هو Gobuster؟
+Gobuster هو أداة brute-force سريعة جدًا مكتوبة بـ Go، بتستخدم لاكتشاف:
+
+Directories وملفات مخفية على مواقع الويب (mode: dir)
+
+Subdomains (mode: dns)
+
+Virtual hosts (mode: vhost)
+
+Amazon S3 buckets (mode: s3)
+
+وحتى Fuzzing (mode: fuzz)
+
+📁 أولًا: Gobuster dir
+✅ تستخدمه إمتى؟
+لما تلاقي موقع HTTP أو HTTPS (بورت 80 أو 443) وعاوز تكتشف:
+
+مسارات directories زي /admin/, /login/, /uploads/
+
+ملفات زي .php, .txt, .bak, إلخ
+
+🔧 الأمر الأساسي:
+bash
+Copy
+Edit
+gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt
+📌 أهم الخيارات:
+الخيار	معناه
+-u	URL الهدف
+-w	ال wordlist اللي هتجرب منها الأسماء
+-x	امتدادات (extensions) زي php, html
+-t	عدد الثريدز (افتراضي 10، أسرع بس أخطر)
+-o	ملف لحفظ النتائج
+
+✅ مثال متكامل:
+bash
+Copy
+Edit
+gobuster dir -u http://10.10.3.194 -w /usr/share/wordlists/dirb/common.txt -x php,txt,bak -t 30 -o found.txt
+🌐 ثانيًا: Gobuster dns
+✅ تستخدمه إمتى؟
+لو عندك اسم دومين (مش IP) وعايز تكتشف:
+
+Subdomains زي admin.site.com, mail.site.com, dev.site.com
+
+🔧 الأمر الأساسي:
+bash
+Copy
+Edit
+gobuster dns -d site.com -w /usr/share/wordlists/dns/subdomains-top1million-5000.txt
+📌 أهم الخيارات:
+الخيار	معناه
+-d	اسم الدومين
+-w	قائمة الـ subdomains
+-i	تجاهل wildcard DNS
+-o	حفظ النتائج
+
+✅ مثال متكامل:
+bash
+Copy
+Edit
+gobuster dns -d example.com -w /usr/share/wordlists/dns/subdomains-top1million-5000.txt -t 30 -o subs.txt
+⚠️ متى تستخدم dir ومتى dns؟
+| عندك IP؟ | استخدم dir |
+| عندك دومين؟ | استخدم dns |
+| عندك صفحة Web؟ | استخدم dir عشان تكتشف المسارات المخفية |
+| بتحاول تكتشف subdomains؟ | استخدم dns |
+
+🔍 أمثلة لحالات حقيقية:
+💡 اكتشاف صفحة Admin:
+bash
+Copy
+Edit
+gobuster dir -u http://10.10.3.194 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+💡 اكتشاف subdomains لـ inlanefreight.local:
+bash
+Copy
+Edit
+gobuster dns -d inlanefreight.local -w ~/subdomains.txt
+📘 Wordlists المفضلة:
+📁 Directories:
+
+/usr/share/wordlists/dirb/common.txt
+
+/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+
+🌐 Subdomains:
+
+/usr/share/wordlists/dns/subdomains-top1million-5000.txt
+
+Seclists: seclists/Discovery/DNS/
+
+🧠 نصائح سريعة:
+استخدم -x php,txt,bak لو الموقع بـ PHP.
+
+زوّد الثريدز -t 50 بس خليك حذر على المواقع الحقيقية.
+
+استخدم -k لو الموقع فيه شهادة HTTPS مش موثوقة.
+
+جرب /robots.txt يدويًا – أحيانًا بيديك تلميحات.

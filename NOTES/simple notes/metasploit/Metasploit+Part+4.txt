@@ -1,0 +1,28 @@
+				Metasploit Part 4 
+
+Difference Between Active and passive scan Recon 
+
+Differences :
+
+Whitebox -----> u have full knowledge ---> active scan
+greybox --------> few knowledge ---> passive scan
+blackbox --------> NO knowledge ---> passive scan
+
+
+
+# netdiscover -h
+# netdiscover -i eth0 -r 192.168.1.0/24 ---> Active
+# netdiscover -i eth0 -r 192.168.1.0/24 -p ---> passive
+run wireshark to see arp 
+
+
+=> 192.168.1.0/24  => 254 ips 
+
+
+
+
+
+
+
+
+

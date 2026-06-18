@@ -1,0 +1,145 @@
+# snapshot
+========================
+# Scanning Network
+------------------
+- Host Discovery
+	# sudo nmap -sn 192.168.2.0/24 ----------------> عشان اعرف الناس الموجودة معايا على الشبكة 
+
+
+🟢 1. nmap 192.168.1.0/24
+🔍 ده بيعمل Full Scan:
+بيعمل:
+
+Ping sweep (يشوف مين شغال).
+
+Port scan (يفحص البورتات المفتوحة).
+
+Service detection (يحاول يعرف نوع الخدمات).
+
+OS detection (لو طلبت).
+
+وبعض الـ scripts.
+
+✅ النتيجة:
+هتكون فيها كل المعلومات عن الأجهزة اللي شغالة، + البورتات المفتوحة في كل جهاز.
+
+🔻 بس ده بياخد وقت أكتر.
+
+🔵 2. nmap -sn 192.168.1.0/24
+🔍 ده بيعمل Ping Scan فقط:
+بيعمل:
+
+فقط يتأكد مين الأجهزة اللي موجودة وشغالة (live).
+
+ما بيفحصش أي بورتات خالص.
+
+✅ النتيجة:
+هتشوف فقط IPs اللي شغالة في الشبكة، بدون ما تعرف البورتات أو الخدمات.
+
+🟡 مفيد لما:
+
+عايز تشوف الأجهزة الحية (بسرعة).
+
+عايز تستخدمه كـ network discovery بس.
+=====================================================
+	# sudo nmap -sn -PU 192.168.2.0/24 ==> UDP Scan
+	# sudo nmap -sn -PS 192.168.2.0/24 ==> Syn Ping Scan
+	# sudo nmap -sn -PA 192.168.2.0/24 ==> Ack Ping Scan
+	# sudo nmap -sn -PE 192.168.2.0/24 ==> Echo Ping Scan
+	# sudo nmap -sn -PO 192.168.2.0/24 ==> Ip Ping Scan
+	# sudo nmap -sn -PM 192.168.2.0/24 ==> netmask ping scan
+	# sudo nmap -sn -PP 192.168.2.0/24 ==> timestamp ping scan
+- Port Scanning:
+	# -sT ==> Tcp Connect Scan && Full Open Scan ==> 3 way handshake
+	# -sS ==> Stealth Scan && Syn Scan && half open scan
+	# -sU ==> UDP Scan
+	# -sA ==> Ack Scan && Firewall detection ==> Ack
+
+	# -sN ==> Null Scan ==> no flags
+	# -sX ==> xmas scan ==> شجرة عيد الميلاد ==> URG && PSH && FIN
+	# -sW ==> Windows Scan ==> ACK flag
+	# -sM ==> Mimon Scan ==> FIN && ACK Flags
+	# -sF ==> Fin Scan ==> FIN Flag
+	# -sC ==> uses default script
+
+	# -T5 => to speed the scan
+	# --min-rate 5000 =>مع nmap معناه إنك بتطلب من Nmap يرسل على الأقل 5000 probe في الثانية — وده بيخلي الفحص أسرع جدًا
+------------------
+- zenmap
+	- sudo apt update
+	- sudo apt install zenmap
+------------------
+- metasploit framework ==> msfconsole
+	# sudo apt update
+	# sudo apt install metasploit-framework
+	# help
+
+	# search portscan
+	# info 5
+	# use 5
+	# options or show options
+	# set RHOSTS ...
+	# run
+-------------------
+- firewall evasion:
+	# -sA ==> Firewall deteaction
+	# -Pn ==> Skip Ping Scan
+	# -n ==> Skip DNS
+	# Avoid Aggerssive Scan
+	# Port By Port
+	# -F ==> Fast Mode (100 port)
+	# -T ==> Timing ==> -T 30m
+	# -D ==> Decoy ==> -D RND:3 ---->عشان اعمل دوشة
+========================
+- nse:
+	# ls /usr/share/nmap/scripts/smb*
+	# ls /usr/share/nmap/scripts | grep "smb"
+	# sudo nmap -sS -v -p 139,445 --script smb-os-discovery.nse 192.168.2.8
+	# sudo nmap -sS -v -p 139,445 --script vuln 192.168.2.8
+	# sudo nmap -sS -v -p 139,445 -sC 192.168.2.8
+	sc -------------------------> اشهر الاسكريبتات
+	# nmap --script-help=.... ----------------> script name
+عشان اعرف الاسكريبت بيعمل ايه
+
+	
+# [default -- vuln -- exploit -- auth -- discovery]-----> category name
+اشتغل بالاسكريبتات دي هتغطي كل ال محتاجه
+
+
+safe:- Won't affect the target
+intrusive:- Not safe: likely to affect the target
+vuln:- Scan for vulnerabilities
+exploit:- Attempt to exploit a vulnerability
+auth:- Attempt to bypass authentication for running services (e.g. Log into an FTP server anonymously)
+brute:- Attempt to bruteforce credentials for running services
+discovery:- Attempt to query running services for further information about the network (e.g. query an SNMP server).
+========================
+# Enumeration بيكون فيه اتصال مباشر بيني وبين خدمه ما علي جهاز الضحية وبقدر اجيب معلومه من داخل السيستم
+	- nc 192.168.2.8 25
+	- ftp 192.168.2.8 ==> 21
+	- telnet 192.168.2.8 ==> 23
+	- ssh ahmed@192.168.2.8 ==> 22
+	- smbclient -L \\\\192.168.2.8\\
+	- smbclient \\\\192.168.2.8\\tmp
+	- http: ==> Visit website ==> http://192.168.2.8 ==> 80
+	- https: ==> visit website ==> https://192.168.2.8 ==> 443
+
+	- ftp 192.168.2.8 -p 2121
+	- telnet 192.168.2.8 25
+	- ssh ahmed@192.168.2.8 -p 2222
+	- http: ==> visit website ==> http://192.168.2.8:8180
+	- https: ==> visit website ==> https://192.168.2.8:8443
+=======================
+# Vulnerabiltiy scanning
+========================
+# System Hacking
+========================
+# Tasks:
+	- scan metasploit
+		[ scan well known ports ] + [ scan all ports ]
+	- Tasks Zenmap
+		[ 
+	- tryhackme [https://tryhackme.com/r/room/furthernmap]
+
+192.168.2.0/24
+192.168.3.0/24 ==> ahmed

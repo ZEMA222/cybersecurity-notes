@@ -1,0 +1,119 @@
+# Kali Linux && Python && Bash
+==============================
+# Python
+---------
+# التعليقات
+# This is a comment
+
+# أوامر الطباعة
+print(1)
+print("Ahmed")
+print('Ahmed')
+
+the victim dosen't have any open ports
+print("the victim dosen't have any open ports")
+
+Name: "Ahmed Sayed"
+print('Name: "Ahmed Sayed"')
+
+print('Ahmed')
+print("Ahmed Sayed")
+
+Name: Ahmed Sayed
+Age: 34
+Job: Penetration Tester
+
+print("Name: Ahmed Sayed\nAge: 34\nJob: Penetration Tester")
+
+print("""
+Name: Ahmed Sayed
+Age: 34
+Job: Penetration Tester""")
+
+print("Ahmed" + 'Sayed')
+
+print('Name: "Ahmed Sayed"' + ' ' + "the victim dosen't have any open ports")
+# تشغيل
+# python3 app.py
+# chmod +x app.py
+# #!/usr/bin/python3
+# ./app.py
+----------------------
+# Variables
+-----------
+name = "Ahmed"
+print(name)
+----------------------
+# Operators المعاملات
+-------------------
+# Mathmatical Operators المعاملات الحسابية
+
++ ==> Addition
+- ==> Subtraction
+* ==> Multiplcation
+/ ==> Divsion
+** ==> Exponent
+% ==> Moduls
+
+x = x + 2 ==> x += 2
+
+# Comaprision Operators المقارنات
+
+> ==> Greater Than
+< ==> Less Than
+== ==> Equal To
+!= ==> Not Equal To
+>= ==> Greater than or equal to
+<= ==> Less than or equal to
+===============================
+# Data Types:
+-------------
+str ==> Letters && Symbols
+int ==> Whole Number
+Float ==> Numbers with decimals
+Bool ==> True or False
+===============================
+# Libarires المكتبات
+# import sys
+===============================
+# 
+===============================
+# Bash
+-------
+# التعليقات
+# This is a comment
+
+# أوامر الطباعة
+# echo ahmed
+
+# تشغيل
+# bash script.sh
+
+# chmod +x script.sh
+# #!/bin/bash
+# ./script.sh
+
+# name="Ahmed"
+# echo $name
+===============================
+# Kali linux
+===============================
+# sys
+# request
+# socket
+# scapy
+# urlib
+# os
+================================
+# نصمم برنامج بيحسب المبلغ الأجمالي الي المتدرب هيدفعوا
+
+# سعر الدورة التدريبيه الواحده 5000 جنية + سعر الشهاده 100 جنية
+
+# الحد الأقصي للشهادات 5 شهادات
+
+# المطلوب حساب المبلغ الأجمالي الي المفروض المتدرب يدفعوا
+
+# لو المتدرب مشترك في دورات تدريبيه بسعر اعلي من 10000 جنية هيحصل علي الشهادات مجانا
+# لو المتدرب مشترك في دورات تدريبيه بسعر اقل من 10000 جنية هيدفع سعر الدورات مضاف ليه سعر الشهادات
+
+# python3 ahmed.py 2 3

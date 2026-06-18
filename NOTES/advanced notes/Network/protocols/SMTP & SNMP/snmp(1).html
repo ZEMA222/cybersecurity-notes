@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاضرة: enumeration SNMP (Simple Network Management Protocol)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #0f172a; /* slate-900 - خلفية داكنة */
+            color: #cbd5e1; /* slate-300 - لون نص فاتح */
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #1e293b; /* slate-800 - لون خلفية المحتوى */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        h1, h2, h3, h4 {
+            color: #e2e8f0; /* slate-100 - لون عناوين فاتح */
+            font-weight: 700;
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            border-bottom: 3px solid #22d3ee; /* cyan-400 */
+            padding-bottom: 15px;
+            color: #22d3ee; /* cyan-400 */
+        }
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 2px solid #334155; /* slate-700 */
+            padding-bottom: 10px;
+            margin-bottom: 1.5rem;
+        }
+        h3 {
+            font-size: 1.4em;
+            color: #22d3ee; /* cyan-400 */
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        h4 {
+            font-size: 1.25rem;
+            color: #94a3b8; /* slate-400 */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #1e293b; /* slate-800 */
+        }
+        table, th, td {
+            border: 1px solid #334155; /* slate-700 */
+        }
+        th, td {
+            padding: 12px;
+            text-align: right;
+        }
+        th {
+            background-color: #334155; /* slate-700 */
+            color: #e2e8f0; /* slate-100 */
+            font-weight: bold;
+        }
+        code {
+            background-color: #131720; /* لون داكن قليلاً للأكواد */
+            color: #f1f5f9; /* slate-100 */
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #131720; /* لون داكن قليلاً للأكواد */
+            color: #f1f5f9; /* slate-100 */
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            direction: ltr; /* Ensure code block is LTR */
+            text-align: left; /* Ensure code block is left-aligned */
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-right: 20px;
+            padding-right: 0;
+        }
+        ol {
+            list-style-type: decimal;
+            margin-right: 20px;
+            padding-right: 0;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        strong {
+            color: #bd93f9; /* color for strong text */
+        }
+        .note {
+            background-color: #083344; /* cyan-900 with opacity */
+            border-right: 4px solid #22d3ee; /* cyan-400 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: right;
+        }
+        .note strong {
+            color: #22d3ee;
+        }
+        .scenario-box {
+            background-color: #1e293b; /* slate-800 */
+            border: 1px solid #334155; /* slate-700 */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .scenario-box div {
+            margin-bottom: 0.5rem;
+        }
+        .scenario-box span {
+            font-weight: 700;
+            color: #e2e8f0; /* slate-100 */
+        }
+        .scenario-box.text-cyan-400 {
+            color: #22d3ee;
+        }
+        .copyright-text {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-size: 0.75rem; /* text-xs */
+            color: #cbd5e1; /* slate-300 */
+            opacity: 0.05; /* very subtle */
+            white-space: nowrap;
+            pointer-events: none; /* ensures text doesn't block interaction */
+            z-index: 1000;
+        }
+        .copyright-left {
+            left: 0;
+            transform-origin: top left;
+            transform: translateY(-50%) rotate(-90deg) translateX(-50%); /* Adjust for rotation origin */
+        }
+        .copyright-right {
+            right: 0;
+            transform-origin: top right;
+            transform: translateY(-50%) rotate(90deg) translateX(50%); /* Adjust for rotation origin */
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155; /* slate-700 */
+            color: #94a3b8; /* slate-400 */
+            font-size: 0.9em;
+        }
+        .social-icons {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .social-icons img {
+            height: 1.2em; /* Slightly larger for visibility */
+            vertical-align: middle;
+            margin-left: 5px; /* Space between text and icon */
+        }
+    </style>
+</head>
+<body>
+    <div class="copyright-text copyright-left">
+        Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy;
+    </div>
+
+    <div class="copyright-text copyright-right">
+        Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy; Hossam Shady | Red Nexus Academy &copy;
+    </div>
+
+    <div class="container">
+        <header class="text-center mb-10">
+            <h1>محاضرة شاملة: enumeration SNMP (Simple Network Management Protocol)</h1>
+            <span style="background-color: white; color: red; font-weight: bold; display: block; width: 100%; text-align: center; padding: 5px; margin-top: 10px;">
+                Red Nexus Academy -
+                <a href="https://www.linkedin.com/in/hossam-ayman-123330193" target="_blank" style="color: red; text-decoration: none;" class="social-icons">
+                    Hossam Shady
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="height: 1em; vertical-align: middle;">
+                </a>
+                <a href="https://wa.me/+201003425890" target="_blank" style="color: red; text-decoration: none; margin-right: 5px;" class="social-icons">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp" style="height: 1em; vertical-align: middle;">
+                </a>
+            </span>
+            <p class="mt-4 text-lg text-slate-400">دليل عملي لتقنيات enumeration معلومات Simple Network Management Protocol</p>
+        </header>
+
+        <main class="space-y-10">
+            <section>
+                <h2>المقدمة</h2>
+                <p>يُعد enumeration SNMP (Simple Network Management Protocol) مرحلة حيوية في أي عملية جمع معلومات خلال اختبار الاختراق. SNMP هو بروتوكول قياسي لإدارة الأجهزة المتصلة بالشبكة (مثل الموجهات، المحولات، الخوادم، الطابعات). يسمح للمسؤولين بمراقبة أداء الشبكة، وتحديد الأجهزة المتصلة، وجمع معلومات التكوين والإحصائيات.</p>
+                <p>ومع ذلك، إذا لم يتم تأمين SNMP بشكل صحيح، يمكن للمهاجمين استغلاله لتعداد معلومات حساسة حول النظام المستهدف. يمكن أن تكشف هذه المعلومات عن تفاصيل حول نظام التشغيل، والخدمات قيد التشغيل، وحسابات المستخدمين، والبرامج المثبتة، وحتى خريطة الشبكة الداخلية. غالبًا ما يتم استخدام community strings الضعيفة أو الافتراضية (مثل "public" أو "private") للسماح بالوصول غير المصرح به.</p>
+                <p>يهدف هذا الدليل إلى تقديم تحليل شامل لتقنيات enumeration SNMP، بما في ذلك الأدوات والأوامر الشائعة المستخدمة، وأنواع المعلومات التي يمكن استخراجها، بالإضافة إلى استراتيجيات الكشف والتخفيف الفعالة.</p>
+            </section>
+
+            <section>
+                <h2>1. أساسيات SNMP و MIBs (قواعد معلومات الإدارة)</h2>
+                <p>يعمل SNMP على نموذج العميل/الخادم. يقوم وكيل SNMP (SNMP agent) بالتشغيل على الجهاز المدار، ويقوم مدير SNMP (SNMP manager) بالاستعلام عن الوكيل لجمع المعلومات. يتم تنظيم المعلومات التي يمكن استردادها في قواعد معلومات الإدارة (Management Information Bases - MIBs)، وهي مجموعات منظمة من الكائنات التي يمكن إدارتها. يتم تحديد كل كائن في MIB بواسطة معرف كائن فريد (Object Identifier - OID).</p>
+                <p>عند إجراء الـ enumeration، يحاول المهاجم عادةً استخدام community strings للوصول إلى بيانات MIB. "public" و "private" هما سلسلتا المجتمع الأكثر شيوعًا وخطورة عند تركهما كافتراضيات.</p>
+
+                <h3>1.1. معرفات الكائنات (OIDs)</h3>
+                <p>معرف الكائن (OID) يمثل عقدة في مساحة اسم هرمية. تحدد سلسلة من الأرقام كل عقدة بشكل فريد، مما يسمح بتحديد موقع العقدة في الشجرة. كلما طالت السلسلة، زادت خصوصية المعلومات. العديد من العقد في شجرة OID لا تحتوي على شيء سوى مراجع لتلك التي تحتها. تتكون OIDs من أعداد صحيحة وعادة ما يتم ربطها باستخدام تدوين النقطة. يمكننا البحث عن العديد من MIBs لـ OIDs المرتبطة بها في سجل معرف الكائن (Object Identifier Registry).</p>
+                <p>تُعد معرفات OID بمثابة عناوين فريدة للوصول إلى معلومات محددة داخل MIB. فيما يلي بعض OIDs الشائعة التي قد تكشف عن معلومات حساسة على أنظمة Windows:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>معرف الكائن (OID)</th>
+                            <th>الوصف</th>
+                            <th>المعلومات المكشوفة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.1.1.0</code></td>
+                            <td>System Description (وصف النظام)</td>
+                            <td>نظام التشغيل، إصدار النواة، معلومات الجهاز.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.1.5.0</code></td>
+                            <td>System Name (اسم النظام)</td>
+                            <td>اسم المضيف للجهاز.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.1.6.0</code></td>
+                            <td>System Location (موقع النظام)</td>
+                            <td>الموقع الفعلي للجهاز (إذا تم تكوينه).</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.25.1.6.0</code></td>
+                            <td>System Processes (عمليات النظام)</td>
+                            <td>قائمة بجميع العمليات التي تعمل على النظام.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.25.4.2.1.2</code></td>
+                            <td>Running Programs (البرامج قيد التشغيل)</td>
+                            <td>معرفات العمليات (PIDs) وأسماء البرامج قيد التشغيل.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.25.4.2.1.4</code></td>
+                            <td>Processes Path (مسار العمليات)</td>
+                            <td>مسارات الملفات التنفيذية للعمليات قيد التشغيل.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.25.2.3.1.4</code></td>
+                            <td>Storage Units (وحدات التخزين)</td>
+                            <td>معلومات حول محركات الأقراص ووحدات التخزين (الحجم، المساحة المتاحة).</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.25.6.3.1.2</code></td>
+                            <td>Software Name (اسم البرنامج)</td>
+                            <td>قائمة بالبرامج المثبتة على النظام.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.4.1.77.1.2.25</code></td>
+                            <td>User Accounts (حسابات المستخدمين)</td>
+                            <td>أسماء حسابات المستخدمين على النظام.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.6.13.1.3</code></td>
+                            <td>TCP Local Ports (منافذ TCP المحلية)</td>
+                            <td>قائمة بمنافذ TCP المحلية التي تستمع إليها الخدمات.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.4.20.1.3</code></td>
+                            <td>IP Address Table (جدول عناوين IP)</td>
+                            <td>عناوين IP المكونة على الواجهات.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.2.2.1.6</code></td>
+                            <td>MAC Addresses (عناوين MAC)</td>
+                            <td>عناوين MAC للواجهات الشبكية.</td>
+                        </tr>
+                        <tr>
+                            <td><code>1.3.6.1.2.1.25.3.2.1.3</code></td>
+                            <td>Installed Software Description (وصف البرامج المثبتة)</td>
+                            <td>أوصاف تفصيلية للبرامج المثبتة.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>سيناريوهات اختراق محتملة باستخدام OIDs:</strong></p>
+                <ul class="list-disc list-inside leading-loose">
+                    <li><strong>اكتشاف الثغرات من إصدارات البرامج:</strong> باستخدام OID <code>1.3.6.1.2.1.25.6.3.1.2</code> أو <code>1.3.6.1.2.1.25.3.2.1.3</code>، يمكن للمهاجم الحصول على قائمة بالبرامج المثبتة وإصداراتها. إذا تم العثور على برنامج بإصدار قديم معروف بوجود ثغرة أمنية، يمكن للمهاجم استغلال هذه الثغرة للحصول على وصول إلى النظام.</li>
+                    <li><strong>جمع أسماء المستخدمين لهجمات القوة الغاشمة/رش كلمات المرور:</strong> OID <code>1.3.6.1.4.1.77.1.2.25</code> يكشف عن أسماء حسابات المستخدمين. يمكن استخدام هذه الأسماء لإنشاء قوائم مستخدمين لهجمات القوة الغاشمة (Brute-Force) أو رش كلمات المرور (Password Spraying) ضد خدمات أخرى (مثل SSH، RDP، SMB).</li>
+                    <li><strong>رسم خريطة الشبكة الداخلية:</strong> من خلال OIDs مثل <code>1.3.6.1.2.1.4.20.1.3</code> (جدول عناوين IP) و <code>1.3.6.1.2.1.2.2.1.6</code> (عناوين MAC)، يمكن للمهاجم بناء فهم أفضل لتكوين الشبكة الداخلية، وتحديد الشبكات الفرعية الأخرى، وأجهزة الكمبيوتر المتصلة، مما يسهل Lateral Movement.</li>
+                    <li><strong>تحديد الخدمات الحساسة:</strong> OID <code>1.3.6.1.2.1.6.13.1.3</code> يكشف عن المنافذ المفتوحة. يمكن للمهاجم تحديد الخدمات التي تستمع على منافذ معينة (مثل قواعد البيانات، خوادم الويب، خدمات الإدارة) ومحاولة استغلالها.</li>
+                    <li><strong>اكتشاف معلومات النظام الحساسة:</strong> OIDs مثل <code>1.3.6.1.2.1.1.1.0</code> (وصف النظام) يمكن أن تكشف عن تفاصيل حول نظام التشغيل وإصدار النواة، مما يساعد في اختيار الاستغلالات المناسبة لرفع الامتيازات.</li>
+                </ul>
+
+                <h3>1.2. إصدارات SNMP (SNMP Versions)</h3>
+                <p>تطورت بروتوكولات SNMP عبر عدة إصدارات، كل منها يقدم تحسينات، خاصة في مجال الأمان.</p>
+                <h4>SNMPv1</h4>
+                <p>SNMP الإصدار 1 (SNMPv1) يُستخدم لإدارة الشبكة ومراقبتها. SNMPv1 هو الإصدار الأول من البروتوكول ولا يزال قيد الاستخدام في العديد من الشبكات الصغيرة. يدعم استرداد المعلومات من أجهزة الشبكة، ويسمح بتكوين الأجهزة، ويوفر الفخاخ (traps)، وهي إشعارات بالأحداث. ومع ذلك، لا يحتوي SNMPv1 على آلية مصادقة مدمجة، مما يعني أن أي شخص يصل إلى الشبكة يمكنه قراءة وتعديل بيانات الشبكة. عيب رئيسي آخر في SNMPv1 هو أنه لا يدعم التشفير، مما يعني أن جميع البيانات تُرسل بنص عادي ويمكن اعتراضها بسهولة.</p>
+                <p><strong>سيناريو اختراق محتمل (SNMPv1):</strong></p>
+                <ul class="list-disc list-inside leading-loose">
+                    <li><strong>اعتراض community strings:</strong> نظرًا لعدم وجود تشفير، يمكن للمهاجمين اعتراض حركة مرور SNMP باستخدام أدوات مثل Wireshark. إذا تم اعتراض سلسلة مجتمع صالحة (مثل "public" أو "private")، يمكن للمهاجم استخدامها للوصول إلى الجهاز.</li>
+                    <li><strong>تعديل التكوينات عن بعد:</strong> في حالة community strings ذات صلاحيات الكتابة (مثل "private" أو سلاسل مخصصة)، يمكن للمهاجمين تعديل تكوينات الجهاز عن بعد، مما قد يؤدي إلى تعطيل الخدمة أو تغيير قواعد جدار الحماية.</li>
+                </ul>
+
+                <h4>SNMPv2c</h4>
+                <p>SNMPv2c هو امتداد لـ SNMPv2 (الذي كان موجودًا في إصدارات مختلفة). الحرف 'c' يشير إلى "community-based SNMP" (SNMP القائم على المجتمع). فيما يتعلق بالأمان، فإن SNMPv2c على قدم المساواة مع SNMPv1، وقد تم تمديده بوظائف إضافية من SNMP القائم على الأطراف (party-based SNMP) الذي لم يعد قيد الاستخدام. ومع ذلك، تكمن مشكلة كبيرة في التنفيذ الأولي لبروتوكول SNMP في أن community string التي توفر الأمان تُنقل فقط بنص عادي، مما يعني أنها لا تحتوي على تشفير مدمج.</p>
+                <p><strong>سيناريو اختراق محتمل (SNMPv2c):</strong></p>
+                <ul class="list-disc list-inside leading-loose">
+                    <li><strong>نفس سيناريوهات SNMPv1:</strong> نظرًا لعدم وجود تشفير أو مصادقة قوية، فإن SNMPv2c عرضة لنفس الهجمات التي تستهدف SNMPv1، مثل اعتراض community strings وتعديل التكوينات.</li>
+                    <li><strong>استغلال ضعف community strings:</strong> لا تزال community strings هي نقطة الضعف الرئيسية. يمكن للمهاجمين استخدام هجمات القوة الغاشمة أو القواميس لتخمين community strings الضعيفة.</li>
+                </ul>
+
+                <h4>SNMPv3</h4>
+                <p>تم زيادة الأمان بشكل كبير في SNMPv3 من خلال ميزات الأمان مثل المصادقة باستخدام اسم المستخدم وكلمة المرور، وتشفير نقل البيانات (عبر مفتاح مشترك مسبقًا). ومع ذلك، تزداد التعقيد بنفس القدر، مع خيارات تكوين أكثر بكثير من v2c.</p>
+                <p><strong>سيناريو اختراق محتمل (SNMPv3 - في حالة التكوين الخاطئ):</strong></p>
+                <ul class="list-disc list-inside leading-loose">
+                    <li><strong>تخمين بيانات الاعتماد الضعيفة:</strong> إذا تم تكوين SNMPv3 بأسماء مستخدمين وكلمات مرور ضعيفة أو افتراضية، يمكن للمهاجمين تخمينها والحصول على وصول.</li>
+                    <li><strong>استغلال نقاط الضعف في التنفيذ:</strong> قد توجد ثغرات أمنية في تنفيذ برامج وكيل SNMPv3 نفسها، والتي يمكن استغلالها حتى لو كانت التكوينات قوية.</li>
+                    <li><strong>سرقة المفاتيح المشتركة:</strong> إذا تمكن المهاجم من الوصول إلى النظام الذي يستضيف وكيل SNMPv3، فقد يتمكن من استخراج المفتاح المشترك مسبقًا المستخدم للتشفير والمصادقة.</li>
+                </ul>
+
+                <h3>1.3. community strings</h3>
+                <p>يمكن اعتبار community strings بمثابة كلمات مرور تُستخدم لتحديد ما إذا كان يمكن عرض المعلومات المطلوبة أم لا. من المهم ملاحظة أن العديد من المنظمات لا تزال تستخدم SNMPv2، حيث يمكن أن يكون الانتقال إلى SNMPv3 معقدًا للغاية، ولكن لا تزال الخدمات بحاجة إلى البقاء نشطة. يسبب هذا العديد من المخاوف للمسؤولين ويخلق بعض المشاكل التي يحرصون على تجنبها. إن نقص المعرفة حول كيفية الحصول على المعلومات وكيف نستخدمها كمهاجمين يجعل نهج المسؤولين يبدو غير مفهوم. في الوقت نفسه، فإن عدم تشفير البيانات المرسلة يمثل مشكلة أيضًا. لأنه في كل مرة تُرسل فيها community strings عبر الشبكة، يمكن اعتراضها وقراءتها.</p>
+
+                <h4>1.3.1. إعدادات خطيرة (Dangerous Settings)</h4>
+                <p>فيما يلي بعض الإعدادات الخطيرة التي يمكن للمسؤول تكوينها في SNMP، والتي يمكن أن يستغلها المهاجمون:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الإعداد</th>
+                            <th>الوصف</th>
+                            <th>سيناريو الاختراق</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>`rwuser noauth`</td>
+                            <td>يوفر وصولاً إلى شجرة OID الكاملة دون مصادقة.</td>
+                            <td>يمكن لأي مهاجم لديه وصول إلى الشبكة الاستعلام عن الجهاز وتعديل تكويناته دون الحاجة إلى بيانات اعتماد. هذا يمنح تحكمًا كاملاً عبر SNMP.</td>
+                        </tr>
+                        <tr>
+                            <td>`rwcommunity <community string> <IPv4 address>`</td>
+                            <td>يوفر وصولاً إلى شجرة OID الكاملة بغض النظر عن مصدر الطلبات، ولكن يقتصر على عنوان IPv4 محدد.</td>
+                            <td>إذا كان المهاجم قادرًا على انتحال عنوان IP المحدد (IP Spoofing) أو التمحور عبر مضيف بهذا العنوان، فإنه يحصل على وصول كتابة/قراءة كامل إلى الجهاز عبر سلسلة المجتمع، مما يسمح بالتعديل عن بعد.</td>
+                        </tr>
+                        <tr>
+                            <td>`rwcommunity6 <community string> <IPv6 address>`</td>
+                            <td>نفس الوصول كما هو الحال مع `rwcommunity` مع اختلاف استخدام IPv6.</td>
+                            <td>نفس سيناريو `rwcommunity`، ولكن يستهدف بيئات IPv6. يمكن للمهاجمين الذين لديهم وصول إلى شبكة IPv6 أو القدرة على انتحال عناوين IPv6 استغلال هذا الإعداد.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h2>2. تقنيات enumeration SNMP</h2>
+                <p>تُستخدم أدوات مختلفة لتحديد الأجهزة التي تعمل بـ SNMP وتعداد المعلومات منها.</p>
+
+                <h3>2.1. فحص Nmap لمنفذ UDP 161</h3>
+                <p>يعمل SNMP عادةً على منفذ UDP 161. يمكن استخدام Nmap لتحديد المضيفين الذين لديهم هذا المنفذ مفتوحًا، مما يشير إلى أن وكيل SNMP قيد التشغيل.</p>
+                <pre><code>sudo nmap -sU --open -p 161 192.168.50.1-254 -oG open-snmp.txt</code></pre>
+                <h4 class="text-xl text-white">شرح الأمر:</h4>
+                <ul class="list-disc list-inside leading-loose ml-4">
+                    <li>`sudo`: يتطلب صلاحيات الجذر لأن فحص UDP قد يتطلب ذلك.</li>
+                    <li>`-sU`: يحدد فحص UDP.</li>
+                    <li>`--open`: يعرض فقط المنافذ التي تم اكتشاف أنها "مفتوحة".</li>
+                    <li>`-p 161`: يحدد فحص المنفذ 161 فقط.</li>
+                    <li>`192.168.50.1-254`: نطاق عناوين IP المستهدف.</li>
+                    <li>`-oG open-snmp.txt`: يحفظ الإخراج بتنسيق Grepable إلى الملف <code>open-snmp.txt</code>.</li>
+                </ul>
+
+                <h3>2.2. enumeration community strings باستخدام `onesixtyone`</h3>
+                <p><code>onesixtyone</code> هي أداة سريعة لتجربة community strings الشائعة (Brute-Force) لتحديد تلك الصالحة. تُعد "public" و "private" community strings الافتراضية الأكثر شيوعًا.</p>
+                <pre><code>echo public > community
+echo private >> community
+echo manager >> community
+for ip in $(seq 1 254); do echo 192.168.50.$ip; done > ips
+onesixtyone -c community -i ips</code></pre>
+                <h4 class="text-xl text-white">شرح الأوامر:</h4>
+                <ul class="list-disc list-inside leading-loose ml-4">
+                    <li>`echo public > community`: ينشئ ملفًا يسمى `community` ويضع فيه سلسلة المجتمع "public".</li>
+                    <li>`echo private >> community`: يضيف "private" إلى نفس الملف.</li>
+                    <li>`echo manager >> community`: يضيف "manager" إلى نفس الملف.</li>
+                    <li>`for ip in $(seq 1 254); do echo 192.168.50.$ip; done > ips`: ينشئ ملفًا يسمى `ips` يحتوي على قائمة بعناوين IP في النطاق `192.168.50.1-254`.</li>
+                    <li>`onesixtyone -c community -i ips`: يشغل أداة `onesixtyone`.
+                        <ul>
+                            <li>`-c community`: يحدد ملف `community` الذي يحتوي على community strings لتجربتها.</li>
+                            <li>`-i ips`: يحدد ملف `ips` الذي يحتوي على عناوين IP المستهدفة.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>مثال إضافي: استخدام قائمة كلمات مجتمع SNMP من Seclists:</strong></p>
+                <p>يمكن استخدام قوائم كلمات المجتمع الأكبر والأكثر شمولاً، مثل تلك الموجودة في Seclists، لزيادة فرص العثور على community strings صالحة.</p>
+                <pre><code>onesixtyone -c /opt/useful/seclists/Discovery/SNMP/snmp.txt 10.129.14.128</code></pre>
+                <p><strong>شرح الأمر:</strong></p>
+                <ul>
+                    <li>`-c /opt/useful/seclists/Discovery/SNMP/snmp.txt`: يحدد مسار ملف قائمة كلمات المجتمع من Seclists.</li>
+                    <li>`10.129.14.128`: عنوان IP المستهدف.</li>
+                </ul>
+                <p>ستقوم الأداة بالإبلاغ عن أي أجهزة تستجيب لـ community strings المحددة، مما يشير إلى وجود نقطة ضعف.</p>
+
+                <h3>2.3. الـ enumeration التلقائي باستخدام `snmpwalk`</h3>
+                <p><code>snmpwalk</code> هي أداة سطر أوامر قوية تستخدم للاستعلام عن وكلاء SNMP واسترداد مجموعات من معلومات MIB. يمكنها استرداد البيانات من OIDs محددة أو "الاستكشاف" (walk) من OID جذر للحصول على جميع المعلومات المتاحة.</p>
+                <pre><code>snmpwalk -c public -v1 -t 10 192.168.50.151</code></pre>
+                <h4 class="text-xl text-white">شرح الأمر:</h4>
+                <ul class="list-disc list-inside leading-loose ml-4">
+                    <li>`snmpwalk`: اسم الأداة.</li>
+                    <li>`-c public`: يحدد سلسلة المجتمع المستخدمة للوصول (في هذا المثال، "public").</li>
+                    <li>`-v1`: يحدد استخدام إصدار SNMPv1.</li>
+                    <li>`-t 10`: يحدد مهلة (timeout) قدرها 10 ثوانٍ.</li>
+                    <li>`192.168.50.151`: عنوان IP الخاص بالجهاز المستهدف.</li>
+                </ul>
+
+                <h3>2.4. سيناريوهات enumeration محددة باستخدام `snmpwalk` و OIDs</h3>
+                <p>يمكن استخدام `snmpwalk` مع OIDs المحددة لتعداد معلومات حساسة ومفصلة حول نظام Windows.</p>
+                <h4>enumeration مستخدمي Windows:</h4>
+                <p>يُستخدم هذا OID لتعداد أسماء حسابات المستخدمين المحلية على نظام Windows. يمكن أن تكون هذه المعلومات قيمة لشن هجمات تخمين كلمات المرور أو القوة الغاشمة.</p>
+                <pre><code>snmpwalk -c public -v1 192.168.50.151 1.3.6.1.4.1.77.1.2.25</code></pre>
+                <h4>enumeration عمليات Windows:</h4>
+                <p>يُستخدم هذا OID لتعداد العمليات الجارية على نظام Windows، بما في ذلك أسماء العمليات ومعرفات العمليات (PIDs). يمكن أن يساعد ذلك في تحديد الخدمات أو التطبيقات المثبتة التي قد تحتوي على ثغرات أمنية.</p>
+                <pre><code>snmpwalk -c public -v1 192.168.50.151 1.3.6.1.2.1.25.4.2.1.2</code></pre>
+                <h4>enumeration البرامج المثبتة:</h4>
+                <p>يُستخدم هذا OID لتعداد قائمة بالبرامج المثبتة على نظام Windows. يمكن أن يكشف عن إصدارات البرامج القديمة التي تحتوي على ثغرات أمنية معروفة.</p>
+                <pre><code>snmpwalk -c public -v1 192.168.50.151 1.3.6.1.2.1.25.6.3.1.2</code></pre>
+                <h4>enumeration المنافذ المفتوحة:</h4>
+                <p>يُستخدم هذا OID لتعداد منافذ TCP المحلية التي تستمع إليها الخدمات. يمكن أن يكمل معلومات فحص المنافذ ويقدم نظرة ثاقبة حول الخدمات النشطة.</p>
+                <pre><code>snmpwalk -c public -v1 192.168.50.151 1.3.6.1.2.1.6.13.1.3</code></pre>
+
+                <h3>2.5. التأثير وما بعد الاستغلال (Impact and Post-Exploitation)</h3>
+                <p>يمكن استخدام المعلومات التي تم جمعها من enumeration SNMP في مراحل مختلفة من سلسلة الهجوم:</p>
+                <ul>
+                    <li><strong>تحديد الثغرات:</strong> الكشف عن إصدارات البرامج القديمة أو المعروفة بوجود ثغرات أمنية (من خلال البرامج المثبتة والعمليات).</li>
+                    <li><strong>تخمين كلمات المرور/القوة الغاشمة:</strong> الحصول على أسماء مستخدمين صالحة يمكن استخدامها في هجمات تخمين كلمات المرور على الخدمات الأخرى.</li>
+                    <li><strong>رسم خريطة الشبكة:</strong> فهم البنية التحتية للأجهزة المتصلة بالشبكة الداخلية (من خلال معلومات الجهاز).</li>
+                    <li><strong>اكتشاف الخدمات:</strong> تحديد الخدمات النشطة والمنافذ المفتوحة لمزيد من الاستطلاع أو الاستغلال.</li>
+                    <li><strong>اكتشاف التكوينات الافتراضية:</strong> تحديد community strings الافتراضية أو الضعيفة التي تسمح بالوصول غير المصرح به.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>3. الكشف والتخفيف من enumeration SNMP</h2>
+                <p>تتطلب الحماية من enumeration SNMP تطبيق أفضل الممارسات الأمنية ومراقبة الشبكة.</p>
+
+                <h3>3.1. الكشف</h3>
+                <ul class="list-disc list-inside leading-loose">
+                    <li><strong>مراقبة حركة مرور SNMP:</strong>
+                        <p>استخدام أنظمة IDS/IPS أو أدوات مراقبة الشبكة لاكتشاف حركة مرور SNMP غير العادية، خاصة تلك التي تنشأ من مصادر غير مصرح بها أو تحاول استخدام community strings متعددة (مما يشير إلى هجوم brute-force).</p>
+                    </li>
+                    <li><strong>مراقبة سجلات وكيل SNMP:</strong>
+                        <p>مراجعة سجلات وكيل SNMP على الأجهزة بحثًا عن محاولات مصادقة فاشلة أو طلبات معلومات غير عادية.</p>
+                    </li>
+                </ul>
+
+                <h3>3.2. التخفيف</h3>
+                <ul class="list-disc list-inside leading-loose">
+                    <li><strong>تغيير community strings الافتراضية:</strong>
+                        <p>تغيير community strings الافتراضية (مثل "public" و "private") إلى سلاسل قوية وفريدة ومعقدة. استخدم community strings مختلفة لأذونات القراءة والكتابة.</p>
+                    </li>
+                    <li><strong>تعطيل خدمة SNMP إذا لم تكن ضرورية:</strong>
+                        <p>إذا لم تكن إدارة SNMP ضرورية لجهاز معين، فقم بتعطيل خدمة وكيل SNMP عليه لتقليل سطح الهجوم.</p>
+                    </li>
+                    <li><strong>تطبيق قوائم التحكم في الوصول (ACLs):</strong>
+                        <p>تكوين وكيل SNMP للسماح بالوصول فقط من عناوين IP الموثوقة والمصرح بها (مثل خوادم إدارة الشبكة المحددة). هذا يمنع المهاجمين من الشبكات الأخرى من الاستعلام عن SNMP.</p>
+                    </li>
+                    <li><strong>استخدام SNMPv3:</strong>
+                        <p>الانتقال إلى SNMPv3، والذي يوفر ميزات أمان محسنة، بما في ذلك التشفير (لخصوصية البيانات)، والمصادقة القوية (لتكامل البيانات وهوية المصدر)، وعدم وجود community strings ضعيفة. SNMPv1 و SNMPv2c لا يوفران التشفير أو المصادقة القوية.</p>
+                    </li>
+                    <li><strong>التصحيح المنتظم:</strong>
+                        <p>تحديث وكلاء SNMP ونظام التشغيل بانتظام لتصحيح أي ثغرات أمنية معروفة يمكن استغلالها في هجمات enumeration SNMP.</p>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>الخاتمة</h2>
+                <p>يُعد enumeration SNMP (Simple Network Management Protocol) تقنية قوية يمكن للمهاجمين استغلالها لجمع كميات كبيرة من المعلومات الحساسة حول الأجهزة والشبكات. من خلال فهم أساسيات SNMP، واستخدام أدوات مثل Nmap و onesixtyone و snmpwalk، يمكن لمختبري الاختراق تحديد نقاط الضعف المحتملة والتوغل بشكل أعمق في البيئة المستهدفة.</p>
+                <p>من منظور دفاعي، تُبرز هذه المحاضرة أهمية تأمين SNMP بشكل صحيح. يجب على المنظمات تجاوز تغيير community strings الافتراضية، واعتماد SNMPv3، وتطبيق قوائم التحكم في الوصول الصارمة، وتعطيل الخدمة إذا لم تكن ضرورية. إن المراقبة الدقيقة لحركة مرور SNMP والوعي بالتهديدات المرتبطة بهذا البروتوكول أمر بالغ الأهمية للحفاظ على أمان البنية التحتية للشبكة.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 محاضرة enumeration SNMP (Simple Network Management Protocol). جميع الحقوق محفوظة.</p>
+            <p>لمزيد من التحديثات والموارد، تابعنا على:</p>
+            <a href="https://linktr.ee/rednexus"> <p><strong>(Red Nexus Academy)</strong></p></a>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# Mobile Devices
+# IOT
+======================
+# Cloud Computing ==> buckets
+------------------
+# s3scanner
+# s3 bucket ==> firefox
+# awscli
+======================
+# Cryptograhpy
+--------------
+# hashcalc
+# cryptoforge
+# vera crypt
+# self-signed-certificate
+======================
+# Dos
+------
+# ms12-020 && vsftpd 3.0.3
+# slowloris
+# synflood
+
+# low orbit
+# high orbit
+======================
+# Session hijacking
+----------------------
+# ahmed 123456 ==> hedaya
+# adel Adel@2024 ==> hedaya
+======================
+# Socail Enginnering
+======================

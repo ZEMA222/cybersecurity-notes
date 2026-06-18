@@ -1,0 +1,324 @@
+cp /path/to/source /path/to/destination
+
+locate and find command ----------> locate filename
+
+
+# locate file.txt 
+
+# locate /var/www/html  --basename index.html
+# sudo updatedb
+# locate /*.txt
+_______________________________________________________
+
+find command => find [path] [options] [expression]
+eg:find /home/user -name "*.pdf"
+
+/ => means in the whole system
+. => means in the current location
+
+find [path] [search_conditions] -exec [command] {} \;
+
+
+# find . -name index.html
+# find / -name index.html
+# find /var/www/html -name index.html
+# find / *.txt	=> find / -name '*.txt'
+# find / -empty
+# find /var/www/html -perm 777   => wrxwrxwrx 
+# find / -type d -name ali
+# find / -type f -name ali 
+# find / -type f -exec grep -l "hossam" {} \;
+# find / -type f -name ali.txt -exec mv {} /home/kali/test/ \;
+
+# find / -size +1M 
+B
+==========================================
+تعالى نرتبلك كل اللي ممكن تحتاجه في الجدول ده:
+
+✅ الأساسيات:
+الأمر	المعنى
+find .	ابحث في المسار الحالي وما داخله
+find /home	ابحث داخل مجلد /home فقط
+find . -name "file.txt"	ابحث عن ملف اسمه file.txt
+find . -iname "file.txt"	زي اللي فوق بس غير حسّاس لحالة الأحرف
+
+🔎 البحث عن أنواع معينة:
+الأمر	المعنى
+find . -type f	ابحث عن الملفات فقط (f = file)
+find . -type d	ابحث عن المجلدات فقط (d = directory)
+find . -type l	ابحث عن الروابط الرمزية (symlinks)
+
+📏 البحث بالحجم:
+الأمر	المعنى
+find . -size +10M	ملفات حجمها أكبر من 10 ميجا
+find . -size -1k	ملفات حجمها أقل من 1 كيلو
+find . -size 100c	ملفات حجمها 100 بايت بالضبط (c = bytes)
+
+🕓 البحث بالتاريخ (التعديل):
+الأمر	المعنى
+find . -mtime -1	ملفات اتعدلت خلال آخر 24 ساعة
+find . -mtime +7	ملفات اتعدلت من أكتر من 7 أيام
+find . -atime -2	ملفات تم "قراءتها" خلال آخر يومين
+
+🧠 فلترة بالاسم و الامتداد:
+الأمر	المعنى
+find . -name "*.txt"	كل ملفات .txt
+find . -name "*.sh"	كل سكربتات الشيل
+find . -iname "*.jpg"	كل الصور .jpg سواء JPG أو jpg
+
+🧨 تشغيل أوامر على النتائج (-exec)
+الأمر	المعنى
+find . -name "*.log" -exec rm {} \;	احذف كل ملفات .log اللي تلاقيها
+find . -type f -exec chmod 644 {} \;	غيّر صلاحيات كل الملفات إلى 644
+find . -name "*.txt" -exec cat {} \;	اعرض محتوى كل ملفات .txt
+
+{} = مكان الملف
+\; = نهاية الأمر (لازم تب escape الـ ;)
+
+🧵 البحث باستخدام المستخدم أو المجموعة:
+الأمر	المعنى
+find . -user mazen	ملفات مملوكة للمستخدم mazen
+find . -group students	ملفات تابعة لجروب students
+
+🔍 Finding Executable Files with find:
+
+1) find . -type f -executable
+   → All files executable by the current user.
+
+2) find . -type f -perm -111
+   → Files where user, group, AND others all have execute permission.
+
+3) find . -type f -perm /111
+   → Files where ANY of user, group, or others has execute permission.
+
+❌ Invalid: find . -perm x → This is not a valid mode.
+
+
+🔥 أمثلة من CTF:
+🔍 دور على ملف مخفي فيه "flag":
+
+find /home -name ".*flag*"
+🔐 دور على ملف تملكه level2:
+
+find / -user level2 2>/dev/null
+🧠 دور على ملف حجمه غريب جدًا:
+
+
+find / -size +100M 2>/dev/null
+💡 خدعة للمبتدئين:
+لو عايز تشوف نوع كل نتيجة:
+
+find . -type f -name "*.txt" -exec file {} \;
+🔚 خلاصة:
+find = أداة مرنة جدًا للبحث، تقدر تستخدمها لوحدها أو تربطها بأوامر تانية عشان تعمل Automation 🔄
+==========================================
+🔍 شرح شامل لأمر du
+✅ معنى du:
+هو اختصار لـ Disk Usage، بيعرضلك حجم الملفات أو المجلدات.
+
+🧠 استخداماته الأساسية:
+الأمر	المعنى
+du	بيعرض حجم كل المجلدات الفرعية في المكان الحالي (مش عملي لوحده).
+du -h	نفس الأمر بس h = human readable (KB, MB...).
+du filename	بيعرض حجم ملف معين بالـ blocks (مش دقيق لو عاوز الحجم بالـ bytes).
+du -b filename	بيعرض الحجم بالـ bytes بالضبط. (أمر مهم جدًا هنا)
+du -a	يعرض كل الملفات والمجلدات.
+du -ah	كل الملفات والمجلدات بحجم مقروء.
+du -ab	يعرض كل الملفات والمجلدات بالـ bytes.
+==========================================
+______________________________________________________
+Regex: Regular Expression 
+
+\w	=> to match letter or number
+[0-9]   => to match only number 
+\s	=> to match spaces
+\W	=> to match anything except numbers or letters
+\D	=> to match anything except numbers
+\S	=> to match anything except spaces
+.	=> to match anything
+^	=> start with	=> ^x
+$	=> end with
+\?	=> match ?
+\!	=> match !
+\.	=> match . 
+\$	=> match $
+[0-9]{2}	=> match 2 digits 
+\s{3}	=> match 3 spaces
+
+_______________________________________________________
+
+grep command 
+# cat file.txt | grep "ahmed"
+
+# cat file.txt | grep -v "ahmed" → Meaning: Show all lines that do NOT contain "ahmed".
+
+# cat file.txt | grep -E "\s"  →  -E means use Extended Regular Expressions (ERE).
+
+cat file.txt | grep -E "^d\@.+\.com"  →	✅ \w+\@\w+\.\w+ → Regex for email:
+grep -E "\w+@\w+\.\w+"
+Matches:
+ahmed@gmail.com
+ali@yahoo.net
+
+ahmed@gmail.com => "\w+\@\w+\.\w+" => email
+ali@yahoo.net
+cat file.txt | grep -E "\s+"
+
+
+_______________________________________________________
+
+🟦 3. du (Disk Usage) -------> du [options] [file/folder]
+
+✅ الوظيفة:
+يعرض المساحة المستخدمة بواسطة الملفات والمجلدات.
+_______________________________________________________
+asterisk (*):
+============
+1) zema* ----> every file which begin with zema
+2)*.txt  ----> every file which ends with .txt
+3) *zema* ---> which contains zema in the middle
+_______________________________________________________
+0> redirect the stdin
+1> redirect the stdout
+2> redirect the stderr
+_______________________________________________________
+
+2>/dev/null → suppress permission errors
+
+
+
+The most common wildcard is the asterisk *, which means:
+
+
+
+
+1. sort
+بيرتب الأسطر في الملف بالترتيب الأبجدي.
+
+✅ ليه بنرتب؟
+علشان الأسطر المتكررة تيجي ورا بعض، وساعتها uniq يقدر يكتشفهم بسهولة.
+
+2. uniq
+بيشوف الأسطر المتكررة ويقدر يفلترهم.
+
+أهم option استخدمناه:
+uniq -u
+-u = unique = هيرجعلك الأسطر اللي ظهرت مرة واحدة بس.
+
+لكن خد بالك: uniq بيشتغل على أسطر متجاورة. علشان كده لازم نستخدم sort قبله.
+
+eg: sort dat.txt | uniq -u 
+_______________________________________________________
+🔓 ولو عايز تفك (decode) الـ base64:
+		eg: echo aGVsbG8K | base64 -d
+📤 الناتج: hello
+_______________________________________________________
+🔁 6. tr (translate)
+استبدال أو حذف حروف.
+
+eg: echo "hello" | tr a-z A-Z
+🔹 يحول الأحرف الصغيرة إلى كبيرة: HELLO
+
+📦 7. tar
+لضغط/فك ضغط ملفات .tar أو .tar.gz
+
+🧪 أمثلة:
+ضغط:
+
+tar -cvf backup.tar myfolder/
+فك:
+
+tar -xvf backup.tar
+
+
+🧰 خلينا نفصّل:
+🔸 لو عايز تضغط:
+➤ مثال: ضغط مجلد myfolder في أرشيف .tar فقط (من غير ضغط):
+tar -cvf archive.tar myfolder/
+الخيار	معناه
+-c	create
+-v	verbose (اعرض الملفات أثناء الضغط)
+-f	file (اسم الملف الناتج)
+
+🔸 لو عايز تفك الضغط:
+➤ فك نفس الملف:
+tar -xvf archive.tar
+الخيار	معناه
+-x	extract (فك)
+-v	verbose
+-f	file
+
+🔄 مقارنة سريعة:
+العملية	الأمر	النتيجة
+ضغط	tar -cvf file.tar folder/	ملف .tar يحتوي على folder/
+فك الضغط	tar -xvf file.tar	استخرج المجلد من الأرشيف
+ضغط بـ gzip	tar -czvf file.tar.gz folder/	ملف .tar.gz
+فك .tar.gz	tar -xzvf file.tar.gz	استخرج الملفات
+
+✅ الخلاصة:
+✔️ نفس الأمر tar يضغط ويفك الضغط.
+
+الفرق كله في استخدامك لـ -c (للضغط) أو -x (للفك).
+
+لو الملف فيه ضغط gzip أو bzip2، بتضيف -z أو -j.
+
+
+
+🌀 8. gzip
+لضغط الملفات بامتداد .gz
+
+🧪 أمثلة:
+ضغط:
+
+
+gzip file.txt
+🔹 النتيجة: file.txt.gz
+
+فك:
+
+
+gunzip file.txt.gz
+🐝 9. bzip2
+ضغط مثل gzip لكن أفضل في الحجم.
+
+🧪 أمثلة:
+
+bzip2 file.txt      # ضغط
+bunzip2 file.txt.bz2  # فك ضغط
+
+🔬 10. xxd
+يحول الملفات إلى hex dump.
+🧪 مثال:
+
+xxd file.txt
+🔹 يوريك الملف بشكل hex + ascii.
+
+
+________________________________________________________
+NOTE:							|
+=====							|
+✅ مقارنة نهائية						|
+الأداة	وظيفتها	يدعم مجلدات؟	الامتداد الناتج		|______
+tar	أرشفة ملفات بدون ضغط (أو مع ضغط)	✅	.tar أو .tar.gz |
+gzip	ضغط ملف واحد	❌	.gz			      |
+bzip2	ضغط ملف واحد (أفضل من gzip)	❌	.bz2	      |	
+
+💡 ملاحظة متقدمة:
+لو عايز تجمع وتضغط مع بعض:
+
+✔️ tar + gzip:
+tar -czvf archive.tar.gz myfolder/
+🔸 -z = استخدم gzip
+🔸 الناتج: أرشيف مضغوط
+
+✔️ tar + bzip2:
+tar -cjvf archive.tar.bz2 myfolder/
+🔸 -j = استخدم bzip2
+_______________________________________________________
+
+
+
+
+
+
+

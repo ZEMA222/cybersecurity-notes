@@ -1,0 +1,92 @@
+ [ Hydra ]
+  ======
+hydra -l <username> -P <wordlist> -f <protocol>://<target-ip>
+
+
+📌 Hydra بتستخدم في:
+كسر الباسووردات (Brute Force / Dictionary Attack)
+
+على بروتوكولات مشهورة:
+ssh, ftp, http, https, smb, telnet, rdp, smtp, vnc ...etc
+
+✅ أهم أوامر وأشكال الاستخدام
+1. بروتوكول عادي زي SSH
+hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://<target-ip>
+-l: اسم يوزر (username)
+
+-P: قائمة كلمات السر (password wordlist)
+
+ssh://: البروتوكول اللي بتهاجمه
+
+2. تجربة أكتر من Username
+hydra -L users.txt -P passwords.txt ssh://<ip>
+-L: ملف usernames
+
+-P: ملف passwords
+
+3. خدمة FTP مثال:
+hydra -l admin -P passlist.txt ftp://<ip>
+4. HTTP Basic Auth مثال:
+hydra -l admin -P pass.txt http-get://<ip>/protected-path
+لو الصفحة login form عادية، شوف القسم الخاص بالـ http-post-form تحت.
+
+🧠 advanced: فورمات HTTP POST Form
+لو عندك login page وبتهاجم فورم:
+hydra -l admin -P pass.txt <ip> http-post-form "/login.php:user=^USER^&pass=^PASS^:Invalid password"
+/login.php → مسار الفورم.
+
+user=^USER^&pass=^PASS^ → البيانات اللي الفورم بيبعتها.
+
+Invalid password → الرسالة اللي تظهر لما الباسوورد يكون غلط (علامة فشل).
+
+📄 ملفات مهمة:
+الملف	الشرح
+/usr/share/wordlists/rockyou.txt	أشهر قائمة كلمات سر في كالي.
+users.txt و pass.txt	بتعملهم بنفسك أو تحملهم جاهزين من الإنترنت
+
+🔥 أوامر مفيدة جدا
+الأمر	الشرح
+-V	يعرض كل محاولة Hydra بيجربها.
+-f	يوقف أول ما يلاقي كلمة سر صح.
+-t 4	عدد الـ threads – السرعة. (افتراضي 16)
+-o output.txt	يحفظ النتائج في ملف.
+-s <port>	لو السيرفر بيشتغل على بورت غير المعتاد.
+-e nsr	تجرب: no password, same as user, reverse.
+-I	لو عايز تكمل الفحص بعد ما توقفه.
+
+🧪 أهم البروتوكولات اللي Hydra بتدعمها:
+hydra -U
+ده بيعرضلك كل البروتوكولات اللي تقدر تشتغل عليها، زي:
+
+ssh
+
+ftp
+
+http-get / http-post
+
+telnet
+
+vnc
+
+smtp / pop3 / imap
+
+smb
+
+rdp
+
+⚠️ تنبيهات أمنية:
+متستخدمش hydra على أهداف حقيقية أو شبكات مش بتاعتك.
+
+Hydra ممكن يعمل مشاكل أو يتسبب في ban من السيرفر.
+
+Hydra مش بينجح دايمًا — لازم تدرس الهدف كويس الأول (مثلًا بورت مفتوح، banner، صفحة login، إلخ).
+
+🎓 عايز تتعلم Hydar عملي؟ أديك خطة:
+تمرن على خدمات وهمية (مثلاً TryHackMe, HTB, أو metasploitable).
+
+جرب بروتوكولات سهلة زي ftp, ssh.
+
+اتعلم إزاي تقرأ HTML login forms عشان تهاجمها بـ http-post-form.
+
+اقرأ الوثائق الرسمية:
+man hydra

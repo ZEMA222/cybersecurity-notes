@@ -1,0 +1,52 @@
+# Wireless Attacks
+------------------
+# Mac Address Change: ==> media access control
+	- ifconfig wlan0 down
+	- ifconfig wlan0 hw ether 00:11:22:33:44:55 -----> to change mac address
+	- ifconfig wlan0 up
+
+	- service NetworkManager restart
+====================
+# Monitor Mode: ==> Automatic
+---------------
+(عشان اوقف اي حاجة ممكن تعيق المونيتور مود) airmon-ng check kill ==> service NetworkManager restart (to stop the check kill)
+	 (to start monitor mood) airmon-ng start wlan0 ==> (to stop monitor mod) airmon-ng stop wlan0mon 
+====================
+# Monitor Mode: ==> Manual
+---------------
+	- ifconfig wlan0 down
+	- airmon-ng check kill ==> service NetworkManager restart
+	- iwconfig wlan0 mode monitor ==> iwconfig wlan0 mode managed
+	- ifconfig wlan0 up
+=========================
+# Pre-Connection Attacks: ==> Monitor Mode Required
+-------------------------
+	- Scan Nearby Networks
+	# airodump-ng wlan0mon 
+	- Packet Sniffing
+	# airodump-ng --bssid ... --channel ... --write ... wlan0mon
+	- Deauthentication Attack
+	# aireplay-ng --deauth ... -a ... wlan0mon ==> (All) ------------>هفصل كل الناس من الشبكة
+	# aireplay-ng --deauth ... -a ... -c ... wlan0mon ==> (One) ------------->هفصل شخص معين من الشبكة
+==========================
+# Gaining Access:
+	# WEP ==> 4 videos
+	# WPA
+	# WPA2
+	# WPS
+	# Evil Twin
+====================
+# Mobile Devices
+# IOT
+# Cloud Computing
+# Cryptograhpy
+# Dos
+# Session hijacking
+# Socail Enginnering
+====================
+# المكنسة
+# C.V
+# RoadMap ==> Next Step
+# جملة مفيدة
+
+hashcat

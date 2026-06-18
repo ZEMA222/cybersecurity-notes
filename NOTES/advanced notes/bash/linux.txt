@@ -1,0 +1,299 @@
+to know who is logged in to your server
+
+# who 
+# last
+# w
+# users
+--------------------
+k- Managing Users
+	- Essential files for users and groups 
+	/etc/passwd   ⇒ فيه بيانات المستخدمين الأساسية (اسم المستخدم، الـ UID، الشيل...).
+	/etc/group     ⇒ فيه بيانات الجروبات.
+	/etc/shadow   ⇒ فيه الباسوردات مشفرة
+
+	/etc/gshadow   ⇒ ده ملف خاص بالجروبات، لكنه بيحتوي على معلومات حساسة أكتر من ملف /etc/group. تحديدًا:
+							الباسوردات الخاصة بالجروبات (لو حطيت باسورد لجروب)				.
+
+
+	/home/{username} ⇒ ده فولدر المستخدم الشخصي.
+	/etc/skel	 => contains default files home for new users   ⇒ ملفات افتراضية لأي يوزر جديد
+	/etc/login.defs  ⇒ ده ملف إعدادات بيتحكم في سياسات تسجيل الدخول على مستوى النظام، خاصة بالحسابات (users).
+	/etc/sudoers	 ⇒ ده ملف حساس جدًا بيتحكم في مين من المستخدمين يقدر يستخدم أمر sudo (يعني ينفذ أوامر بصلاحيات الـ root).
+
+________  eg: kali ALL=(ALL) NOPASSWD: ALL ⇒ عشان اشيل الباسورد لما اجي استخدم sudo
+       |_____________________________________________________________________________
+NOTE:
+ ممنوع تفتحه وتعدّل عليه بأي محرر عادي (زي nano أو vim) 
+عشان لو عملت غلطة، ممكن تقفل صلاحيات sudo عنك.
+
+✅ استخدم بدل كده:  visudo
+____________________________________________________________________________
+	
+- Adding, Deleting , Modifying user account
+		
+	- add new user
+	   # useradd -m -s /bin/bash -G sudo john 
+	-m is used to add a home directory
+	-s to specify the shell
+	-G to add it to a group
+	john is the username
+
+	- change the password 
+	   # passwd {username}
+	- delete user 
+	   # userdel -r john
+
+عشان احول من اليوزر ال انا فيه للجديد ---->su username
+
+eg: su john
+
+بعدها احول المسار ال انا فيه عشان اروح على مسار اليوزر الجديد ----> cd ~
+
+
+
+	- modify user 
+	   - change the user home directory 
+		# usermod -d /new/directory {user} 
+		# su john
+		# cd ~
+		# pwd
+
+	   - change the username of specific user 
+		# usermod -l newusername   {user}
+		eg: usermod -l mazen john ===> john is the username and i want to change it into mazen
+
+	   - change the shell of login 
+		# usermod -s /bin/zsh   {user}
+
+	   - change the groups  ( remove the last group ) 
+		# usermod -G group1,group2  {user}
+
+	   - add user to new group without deleting last groups 
+	# usermod -aG newgroup  {user}  ⇒ -a is used to append
+
+
+   - listing user information 
+	# id {username}
+_________________________________________________________________
+NOTE ⇒ ID COUNT BEGINS FROM 1000
+eg :    kali ⇒ 1000
+	mona ⇒ 1001
+	ahmed ⇒ 1002
+________________________________________________________________
+   - to lock user account (Prevent him from login ) 
+	# passwd -l {username}
+
+   - unlock account {permit him to login } 
+	# passwd -u {username}
+
+
+- Managing groups
+
+    - add new group with id 
+	#  groupadd {groupname} 
+	# groupadd {groupname} -g {GID} ⇒ GID is the id number
+
+    - delete group 	
+	# groupdel {groupname}
+    
+    - rename group name 
+	# groupmod  {old_name} -n {new_Group_name} 
+
+    - change the gid of the existing group 
+	#groupmod -g {GID} {groupname}
+
+
+   - Adding a User to a Group
+	# usermod -aG groupname username
+
+   - remove user from group 
+	# sudo gpasswd -d username groupname
+
+   - to know the groups that username in it 
+	# groups username
+
+   - to get more information about group
+	# getent group groupname
+
+   - to change the primary group for username
+	# usermod -g {newgroup} {username}
+
+   - to put password for the group 
+	# gpasswd {groupname}
+
+
+ - to join a group
+	# newgrp {groupname}
+
+
+- password aging and get more information about the user's passwords
+   
+   - to get infromation about the password of user as expireation 
+	# chage -l username
+
+   - to set password policy 
+	# chage  [option] username 
+	
+	- option as :
+	- {-m days => set the min number of days password to change}
+	- {-M days => set the max number of days password need to change}
+	- {-W days => set the number of days to warn changing the password
+	- { -I days => Sets the number of inactive days after a password expires before the account is locked
+	- {-E data => Sets an account expiration date in the format YYYY-MM-DD }  
+
+
+
+
+
+
+- check the /etc/shadow
+admin:$y$j9T$CbCTLnmDfJaWMDz6EaxEF0$wgVb2ruLvNfM0kvAqLglnnQb/K2VgzEDxqeRD4kRCS4:19957:0:99999:7:::
+ 	
+	
+	- 1th field: user
+	- 2th field: user's password hash (bycrypt) 
+
+- 3th field: when last time password changed from 1970-1-1
+- 4th field: the minimum number days  password can be changed 
+
+- 5th field: maximum number of days password need to be changed
+- 6th field: days to warn user to change password (before 7 days
+	
+- 7th field: days after password expired and before  account is locked
+
+- 8th field: account expiration date (number of days since 1970)
+
+
+
+- to force user to change his password in the first time 
+	# passwd -e username
+
+- /etc/skel directory (default configuration files for new users) 
+   - if you need to add new file added to every new user then
+	# nano /etc/skel/newfile.txt
+	# useradd -m hossamshady
+
+-   Locking an account 
+	# passwd -l username
+	# usermod -s /sbin/nologin username	=> change shell dir
+	# usermod -s /bin/false  username
+-   Unlocak an account
+	# passwd -u username
+	# usermod -s /bin/sh
+	# usermod -s /bin/zsh
+	# usermod -s /bin/bash
+
+
+- Grphical user and group administration
+	- open settings 
+	- navigate users
+	- now you can add , modify and delete users
+
+	# sudo apt install gnome-system-tools gnome-system-tools
+	or 
+	# sudo apt install kuser
+	or 	
+	# sudo apt install cockpit	
+	# sudo systemctl start cockpit 
+	=> Access it via a web browser at http://localhost:9090.
+
++201003425890
+hh5645621@gmail.com
+`
+------------------------------
+
+=> file permissions 
+
+	- execute(x) => 1
+	- write (w)  => 2 
+	- read (r)   => 4
+ 
+
+	# chmod 777 file.txt
+
+
+   - user catagory 
+	- Owner
+	- Group 
+	- Others
+	
+	# ls -lah
+	(-rwxrw-r--  1 root root  730 Jul 28 07:39 test.txt) 
+	- 1th field: show if it is direcroty (d) or file 
+	- 3 fields ( 2th,3th,4th) are related to Owner
+	- 3 fields (5th,6th,7th) are related to Group
+	- 3 fields (8th,9th,10th) are related to Others 
+
+   - to change the mode of the file 
+	 # chmod u+x file.txt 	=> add execute for the owner 
+	or # chmod chmod 755 file.txt
+	
+	as (1=>x, 2=>write, 4=>read)
+
+   - chown [options] owner:group filename
+	# to change the ownership of file to user=> alice, group(admins)
+	# chown alice:admins file.txt
+    
+   - to change the group only (change the group of file to admins)
+	# chgrp admins file.txt 
+
+
+   - to prevent any modification for the file 
+	# chattr +i filename
+  
+   -  to remove prevention 
+	# chattr -i filename
+
+   - to allow only append
+	# chattr +a filename
+   
+   - No-Access Time (A): Prevents the file access time from being updated
+	# chattr +A filename
+ 
+   - Restricted Deletion (d): Prevents a file from being deleted or renamed by users who do not own the file, even if they have write permissions.
+	# chatter +d filename`
+
+   
+- file system types 
+	- EXT4( Extended File system family version 4)
+	   - support large files up to 1000 TB
+	   - Faster than last versions 
+	   - Use Case: Modern Linux systems `(default for many distributions), general-purpose usage.
+ 
+	- NTFS  (New Technology File system ) 
+	   - Support for large files and volumes.
+	   - File-level encryption (EFS)
+	   - Use Case: Windows operating systems, external drives shared between Windows and Linux.
+
+	- ISO 9660 => ovf 
+	   - File system for optical media (CDs and DVDs)
+	   - Use Case: Optical discs (CDs, DVDs), often used for bootable media
+
+	- NFS (Network File System) 
+	   - Allows file access over a network
+	   - commonly used in enterprise and server environments
+
+	- SMB/CIFS (Server Message Block/Common Internet File System)
+	   - Protocol for network file sharing, primarily between Windows and other systems
+	   - Allows remote file access, printing, and more over a network
+
+____________________________________________________________________________
+		TO KNOW WHO IS LOGGED IN
+		=========================
+	# who
+	# w
+	# last
+	# users
+
+	   
+
+
+
+
+
+
+
+
+
+
+

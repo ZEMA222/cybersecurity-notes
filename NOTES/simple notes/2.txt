@@ -1,0 +1,95 @@
+# يخريبت السوشيال ميديا الي بوظت سمعتنا
+# الهبد
+==========================
+# Cyber Seucrity الامن السيبراني
+--------------------------
+# Red Team
+	- offensive هجومي
+	- penetration tester مختبر اختراق
+	- white hat hacker الهكر ذو القبعة البيضاء
+	- ethical hacker الهكر الأخلاقي
+	- بيهاجم السيستم زي الهكر بالظبط وبنفس الادوات بهدف اكتشاف الثغرات وتقديم توصيات بالحلول
+# Blue Team
+	- defensive دفاعي
+	- وقت الحرب بيصد الهجوم وقت السلم بيرص دفاعات وبيتأكد من سير العملية الأمنية
+# Security Analsis: المحقق الجنائي او المحلل الأمني
+	- hacker
+	- scan
+==========================
+# يعني شهادة؟!؟
+# CEH
+# OSCP
+==========================
+# Module 0:
+	- virtualization
+	- kali linux
+	- tcp/ip
+------------------------
+# Module 1:
+	- introdcution to ethical hacking
+------------------------
+# Sat - Sun ==> Recab
+# Tasks
+
+# Module 0:
+	- Virtualization الأجهزة الوهمية
+		# Windows 10
+		# 8 Giga Ram && Core i5 4th Gen.
+		# Virtualization Technology ==> Enabled
+		[Google: ==> virtualization technology bios ...]
+
+		# virtual-box
+		# ex. pack ==> Add-on
+		# kali linux ==> Attacker المهاجم ==> Right Click ==> Extract Here
+		# virtual vms ==> Victims الضحايا ==> right click 
+			- windows 7
+			- kioptrix
+			- metasplitable
+		# error handling
+		# nat network ==> 10.0.2.0/24 ==> 192.168.2.0/24
+		# snapshot ==> استعاده ضبط المصنع
+		# recommanded settings
+----------------------
+	- kali linux الكالي لينكس ==> kali && kali
+		# kali linux overview
+		# kali linux shortcuts
+			- CTRL SHIFT + ==> Zoom in
+			- CTRL - ==> Zoom Out
+			- CTRL SHIFT T ==> New Tab
+			- CTRL SHIFT R ==> Split Horzointally
+			- CTRL SHIFT D ==> Split vetically
+			- CTRL SHIFT E ==> Close sub-terminal
+			- CTRL SHIFT W ==> Close Terminal
+			- CTRL SHIFT C ==> Copy
+			- CTRL SHIFT V ==> Paste
+			- CTRL C ==> Kill or stop
+			- tab
+		# kali linux commands
+			pwd: بتجيب المكان اللي انت واقف فيه حاليًا (الدايركتوري الحالي).
+ls : بتعرض كل الملفات والفولدرات الموجودة في المكان الحالي.
+cd : بتنقلك لفولدر معين.
+cd .. : بتطلعك خطوة لفوق (للفولدر الأب).
+mkdir : بتعمل فولدر جديد.
+touch : بتعمل ملف جديد فاضي.
+nano : محرر نصوص، بـ (CTRL + S) تحفظ و(CTRL + X) تخرج.
+cat : بتعرض محتويات الملف مباشرة في التيرمنال.
+rm : بتحذف ملف معين.
+rmdir :    بتحذف فولدر فاضي.
+rm -R ...     : بتحذف فولدر بكل اللي جواه.
+cp           : بتنسخ ملف أو فولدر لمكان تاني.
+mv      : بتنقل ملف أو فولدر أو بتغير اسمه.
+chmod   : بتغير صلاحيات الملف أو الفولدر (زي اللي يقدر يعدل أو يشغل أو يقرأ).
+
+			- sudo
+			- sudo apt update
+			- sudo apt install ....
+			- sudo apt upgrade -y
+			- sudo apt dist-upgrade -y
+			- sudo apt full-upgrade -y
+-----------------------
+	- tcp/ip ==> Network fundamental أساسيات الشبكات
+---------------------
+# domain -------> هو اسم الموقع 
+ex: facebook , youtube
+# sub domain---------> هو الاسم ال قبل ال domain
+ex: test.facebook.com ---> domain = facebook , subdomain= test

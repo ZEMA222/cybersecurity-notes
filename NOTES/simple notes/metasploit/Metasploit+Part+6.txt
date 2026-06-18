@@ -1,0 +1,17 @@
+				Metasploit Part 6
+
+> search portscan
+> use <id>
+> show options
+> set RPORTS  1-65535
+> set RHOSTS  192.168.1.0/24 => 192.168.1.1 `
+> set THREADS 10
+> 
+> run -j
+> jobs --help`
+> jobs -k
+
+> show advanced 
+> hosts
+> services
+ 

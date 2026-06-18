@@ -1,0 +1,129 @@
+Nmap Scripting Engine أو NSE دي حاجة جامدة جدًا في أداة Nmap، بتزوّدها بقدرات زيادة كتير جدًا.
+الـ Scripts (السكربتات) دي مكتوبة بلغة اسمها Lua، وبتستخدم في حاجات كتير، زي:
+
+تكشف ثغرات (Vulnerabilities)
+
+تعمل استغلال تلقائي (Exploitation) للثغرات
+
+تجمّع معلومات عن الشبكة (Reconnaissance)
+
+يعني مثلاً بدل ما تعمل كل حاجة يدوي، تقدر تشغّل سكربت جاهز يعمل الحاجة اللي انت عايزها.
+
+السكربتات دي متقسّمة لفئات (Categories)، وكل فئة ليها هدف:
+safe: سكربتات آمنة، مش هتأثر على الهدف، بس بتجيب معلومات مفيدة.
+
+intrusive: دي العكس، ممكن تضر أو تغيّر حاجة في السيستم المستهدف.
+
+vuln: بتفحص لو في ثغرات معروفة في النظام.
+
+exploit: بتحاول تستغل الثغرات اللي اكتشفتها.
+
+auth: بتحاول تتخطى تسجيل الدخول أو تدخل على سيرفرات من غير باسورد، زي مثلاً FTP Anonymous.
+
+brute: بتحاول تفك الباسوردات عن طريق تجربة كلمات مرور كتير (Brute Force).
+
+discovery: بتسأل السيرفرات شوية أسئلة (Query) علشان تعرف أكتر عن الشبكة، زي مثلاً SNMP.
+
+وفيه لستة أكبر بالفئات دي ممكن تلاقيها في الموقع الرسمي أو في الدوكيمينتيشن بتاعت Nmap.
+===================================================
+nmap --script=script-name target
+nmap -p 21 --script=script-name target
+
+عشان تسخدم اكتر من سكريبت بتحط ,
+eg: nmap --script=ftp-anon,http-title 192.168.1.10
+
+locate script-name => بيوريلك وصف الاكسريبت
+
+eg: locate ftp-anon.nse
+
+✅ 1. استخدم --script-help علشان تعرف كل حاجة عن السكربت
+ده أهم أمر تستخدمه لما تحب تفهم سكربت معين:
+
+nmap --script-help=script-name target
+
+===================================================
+argument uses:
+=============
+nmap --script=script-name --script-args=argument-name target 
+
+✅ 3. عايز تشوف كل السكربتات والـ args بتاعتها؟
+لو على كالي أو باروت:
+
+ls /usr/share/nmap/scripts/
+بعد كده:
+
+cat /usr/share/nmap/scripts/http-put.nse
+وجوا الملف هتلاقي شرح مبسط أو حتى سطر فيه:
+
+portrule = ...
+action = ...
+وغالبًا فوق أو تحت هتلاقي الكلام ده:
+
+-- @args http-put.url
+-- @args http-put.file
+ودي معناها إن السكربت بياخد اتنين args:
+
+http-put.url
+
+http-put.file
+
+
+=======================================================
+
+🔍 إزاي تلاقي سكربتات Nmap اللي ممكن تستخدمها؟
+سواء عايز سكربت معين، أو بتدور على سكربتات من فئة معينة (زي vuln أو safe).
+
+✅ عندك طريقتين أساسيين:
+✨ 1. موقع Nmap الرسمي
+اللينك بيكون غالبًا كده:
+https://nmap.org/nsedoc/
+
+تقدر تشوف كل السكربتات بالاسم، ووصفها، وفئتها (Category)، والبورتات اللي تشتغل عليها، ولو فيه arguments مطلوبة.
+
+✨ 2. من على جهازك (Local Storage)
+كل سكربتات Nmap بتكون محفوظة هنا
+
+/usr/share/nmap/scripts/
+📁 طيب إزاي أبحث عنها؟
+🔹 باستخدام grep في ملف script.db:
+
+grep "ftp" /usr/share/nmap/scripts/script.db
+ده بيطلعلك كل السكربتات اللي ليها علاقة بـ ftp.
+
+🔹 أو باستخدام ls بالنجوم:
+
+ls -l /usr/share/nmap/scripts/*ftp*
+النجمة * معناها "أي حاجة قبل أو بعد الكلمة"، فهتجيب كل الملفات اللي فيها الكلمة.
+
+🧠 كمان تقدر تدور على فئة معينة:
+مثال:
+
+grep "safe" /usr/share/nmap/scripts/script.db
+هيطلعلك كل السكربتات اللي تحت فئة "safe".
+
+⬇️ لو لقيت سكربت موجود أونلاين ومش عندك؟
+في طريقتين:
+
+✅ 1. تحديث Nmap (أفضل حل سريع):
+
+sudo apt update && sudo apt install nmap
+ده بيحدّث Nmap بكل السكربتات الرسمية.
+
+✅ 2. تحميل السكربت يدويًا من موقع Nmap:
+
+sudo wget -O /usr/share/nmap/scripts/<script-name>.nse https://svn.nmap.org/nmap/scripts/<script-name>.nse
+مثال:
+
+sudo wget -O /usr/share/nmap/scripts/smb-vuln-ms17-010.nse https://svn.nmap.org/nmap/scripts/smb-vuln-ms17-010.nse
+بعد كده لازم تعمل تحديث لقائمة السكربتات:
+
+sudo nmap --script-updatedb
+✅ لو كتبت سكربت بـ Lua بنفسك؟
+نفس الخطوات:
+
+تحفظه في /usr/share/nmap/scripts/
+
+ثم تعمل:
+
+sudo nmap --script-updatedb
+

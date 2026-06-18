@@ -1,0 +1,14 @@
+				Metasploit Part 7
+
+> db_nmap 192.168.1.0/24 
+> hosts 
+> services 
+
+what is smb ( Server Message Block )
+
+Server Communication Protocol used to share Files , Printers , Serial Ports ...
+
+> search smb => 445 => microsft-ds
+to know the version of smb
+> use auxiliary/scanner/smb/smb_version
+

@@ -1,0 +1,196 @@
+# Network Fundemental أساسيات الشبكات
+	- ip ==> internet protocol
+- mac ==> media access control ---> يختلف من جهاز لاخر
+	- dns ==> Domain name server
+خادم أسماء النطاقات (Domain Name Server - DNS) هو جزء أساسي من بنية الإنترنت. وظيفته هي ترجمة أسماء النطاقات التي يمكن للبشر قراءتها (مثل: www.example.com) إلى عناوين IP التي تستخدمها الأجهزة للتواصل على الشبكة.
+
+	- ipv4
+	- public ip && local ip
+	- ip classes
+		# Class A: N - H - H - H ==> 1 - 127
+		# Class B: N - N - H - H ==> 128 - 191
+		# Class C: N - N - N - H ==> 192 - 223
+
+	# 0 - 255
+	- netmask
+		# Class A: 255.0.0.0
+		# Class B: 255.255.0.0
+		# Class C: 255.255.255.0
+	- CIDR
+		# Class A: /8
+		# Class B: /16
+		# Class C: /24
+	- binary
+==================================
+# Module 2: [information gathering جمع المعلومات] ==> vulnweb.com
+	- passive ==> OSINT
+OSINT هو اختصار لـ Open Source Intelligence، ويُترجم إلى "استخبارات المصادر المفتوحة".
+ يشير إلى جمع وتحليل المعلومات المتاحة بشكل علني من مصادر متنوعة لتوليد رؤى أو استخبارات تُستخدم عادةً في مجالات مثل الأمن السيبراني، التحقيقات الجنائية، والتقييمات الأمنية.
+
+		# Search Enginnes محركات البحث  :
+	=============================
+		[All - Images - Videos - Maps]
+		# Google Dorks && Google Hacking
+		[site:.... && intitle:.... && intext:... && inurl:... && filetype:...] 
+		intitle -----> الكلام ال بالازرق
+
+		# netcraft ==> [https://searchdns.netcraft.com/]
+		# theHarvester
+		[theHarvester -d vulnweb.com -l 3000 -f vuln -b All ] ------> -d the site u want to search
+									    -b the browser
+									    -l how many results do u want
+   -f is used to specify the filename for saving the results of your scan.
+
+Here’s an example:
+		# photon ==> [https://github.com/s0md3v/Photon]
+		[git clone https://github.com/s0md3v/Photon.git]
+		[cd Photon]
+		[docker build -t photon .]
+		[docker run -it --name vuln photon:latest -u vulnweb.com]
+		# httrack
+		# email track pro
+		# whois
+		[whois microsoft.com]
+		# securitytrails.com
+		# traceroute && tracert
+		[traceroute vulnweb.com] ==> kali
+		[tracert vulnweb.com] ==> windows
+
+		# recon-ng
+		[marketplace]
+		[marketplace search netcraft]
+		[marketplace info recon/domains-hosts/netcraft]
+		[marketplace install recon/domains-hosts/netcraft]
+		[marketplace remove ....]
+		[marketplace refresh]
+		[marketplace search]
+
+		[modules]
+		[modules search]
+		[modules load recon/domains-hosts/netcraft]
+		[info]
+
+		[options set SOURCE vulnweb.com]
+		[run]
+
+		[dashboard]
+		[show]
+		[show hosts]
+
+		[back]
+		[marketplace search]
+		[marketplace info reporting/html]
+		[marketplace install reporting/html]
+		[modules load reporting/html]
+		[info]
+		[options set CREATOR Ahmed Sayed]
+		[options set CUSTOMER CyberCamps]
+		[options set FILENAME /home/kali/Desktop/ahmed.html]
+		[run]
+=============================
+	- active
+	- enumeration
+==================================
+# Black-Hat-Hacker
+# Grey-Hat-Hacker
+# White-Hat-Hacker ==> Penetration tester مختبر اختراق
+	# Black-Box-Testing
+	# Grey-Box-Testing
+	# White-Box-Testing
+==================================
+# Adopting the hacker mindset محاكاة لعقل الهكر
+# Heka@2021
+# krem
+
+# ahmed.com ==> Domain نطاق
+# test.ahmed.com ==> sub-domain نطاق فرعي
+==================================
+# Core
+	- 2 days recab
+	- 5 websites
+		# except traceroute && tracert && photon && httrack
+	- 5 websites ==> recon-ng ==> 5 workspaces
+		# netcraft
+		# 5 modules
+# Self-Study
+==================================
+# httrack
+# emailtrackpro
+# Binary
+==================================
+
+
+المعطيات
+Network: 10.0.0.0/24
+
+عايزين نعمل 4 subnets.
+
+الخطوة 1: حساب الـ New Subnet Mask
+/24 = 255.255.255.0
+
+4 subnets معناها نحتاج 2 bits زيادة من الـ host part:
+
+2
+𝑛
+=
+4
+  
+⟹
+  
+𝑛
+=
+2
+ bits
+2 
+n
+ =4⟹n=2 bits
+القناع الجديد:
+
+/
+24
++
+2
+=
+/
+26
+/24+2=/26
+/26 mask = 255.255.255.192
+
+الخطوة 2: حساب الـ Block Size
+الـ block size = 256 - آخر أوكتت في الماسك
+
+256
+−
+192
+=
+64
+256−192=64
+يعني كل subnet هتزيد 64 عنوان.
+
+الخطوة 3: تقسيم الشبكات
+Subnet 1:
+Network: 10.0.0.0
+Broadcast: 10.0.0.63
+
+Subnet 2:
+Network: 10.0.0.64
+Broadcast: 10.0.0.127
+
+Subnet 3:
+Network: 10.0.0.128
+Broadcast: 10.0.0.191
+
+Subnet 4:
+Network: 10.0.0.192
+Broadcast: 10.0.0.255
+
+✅ إذن:
+
+BC1: 10.0.0.63
+
+BC2: 10.0.0.127
+
+BC3: 10.0.0.191
+
+BC4: 10.0.0.255
+

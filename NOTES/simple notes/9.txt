@@ -1,0 +1,51 @@
+# Websites: ==> port 80 (http) && port 443 (https) && website
+-----------
+# How Website Works
+# Web Server Attacks
+	# visit website
+	# review source code ==> Comments ==> <!-- ... -->
+	# web archive
+	# wappalyzer ==> firefox add-on
+	# nikto ---------->  بيعمل أشعة على الويب سايت
+	[nikto -h http://192.168.2.8]
+	# gobuster
+	[sudo apt update]
+	[sudo apt install gobuster]
+	[gobuster dir --url ... --wordlist ...
+	[/usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt]
+=========================
+# Web Application Attacks:
+	# xss ==> cross site scripting
+هو استخدام لغة ال JavaScript داخل المواقع
+	# JavaScript
+	# JavaScript is the future
+
+نوعين:
+
+	1 )# Refelcted ==> Link
+
+هكتب الكود ف الموقع و هاخد لينك الموقع بعد كتابة الكود و هبعته -
+
+	2 )# Stored ==> Server
+
+هسيف الكود ف مكان معين لما يدوس عليه اليوزر الكود هيتنفذ -
+لما بيتنفذ بيروح على السيرفر -
+
+
+http://192.168.2.8/dvwa/vulnerabilities/xss_r/?name=%3Cscript%3Ealert%281%29%3C%2Fscript%3E#
+http://192.168.2.8/dvwa/vulnerabilities/xss_r/?name=ahmed#
+
+	# <script>alert(1)</script>              -----> B2OLO PRINT 1
+	# alert(1)</script> 
+=========================
+ahmed.com ==> Domain
+test.ahmed.com ==> sub-domain نطاق فرعي
+ahmed.com/test ==> directory
+=========================
+# يصلح يكون وظيفة لوحده
+# كارت واسطه
+# مجال العمل الحر
+
+# الجيم
+=========================
+# Flag.txt ==> well done, 10 points

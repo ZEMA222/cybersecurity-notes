@@ -1,0 +1,40 @@
+# information gathering جمع المعلومات
+---------------------------------
+# Passive
+	# whois
+	# google hacking && google dorks
+	# netcraft
+	# security headers
+	# open-source code
+	# shodan
+--------------------------------
+# Active
+	# DNS Enumeration
+		# host
+		# dnsrecon ==> dnsrecon -d zonetransfer.me
+		# dnsenum ==> dnsenum zonetransfer.me
+		# nslookup ==> nslookup zonetransfer.me ==> nslookup -type=mx zonetransfer.me
+	# Smb Enumeration
+		# net-connection
+		# nbtscan
+		# smb-os-discovery.nse
+		# net view
+	# SMTP Enumeration
+	# SNMP Enumeration
+==================================
+# Vulnerability Scanning
+	# Nessus
+	# nmap
+		# cat. vuln
+		# vulners.nse
+==================================
+# Locating Public Exploit
+==================================
+# Active Directory
+==================================
+# Privilege Esclation Windows
+# Privilege Esclation Linux
+==================================
+# Web Application
+# Client Side Attack
+# 

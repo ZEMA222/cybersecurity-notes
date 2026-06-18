@@ -1,0 +1,37 @@
+				Metasploit Part 5
+
+
+# netdiscover -i eth0 -r 192.168.1.0/24
+
+Difference between nmap and db_nmap
+
+dp_nmap ----> بتسجل كل حاجة داخل ال metasploite
+
+use both to make scan and then 
+> hosts 
+> services 
+
+change the workspace and search again for # hosts And you won't see anything
+> workspace -a xyz
+> workspace xyz
+
+
+can make nmap scan but save files -oA file
+take the path for file.xml and import it inside Metasploit
+
+> db_import /path/to/file.xml
+
+> hosts
+
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+

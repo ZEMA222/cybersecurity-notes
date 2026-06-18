@@ -1,0 +1,224 @@
+Linux +  (Advanced Linux Administration) 
+
+a- Using Documentation 
+	- man
+	- apropos
+	- what is 
+	- info 
+b- File Commands 
+	- Copy file 
+	- Moving files 
+	- Deleting files
+	- reading files: cat , less , more , nl , head , tail
+	- create empty file: touch
+	- compress and decompress -------> (zip - unzip) 
+
+c- locate files and find 
+d- grep and regular expression 
+e- piping and redirecting 
+f- Gnome Environment 
+	- About Gnome
+	- shortcuts 
+
+	- CTRL + SHIFT + C 
+	- CTRL + SHIFT + V
+	- CTRL + ALT + U
+g- text editor and vim --------> like nano to write a text file 
+vim steps: 1) save and quite ------> Esc + wq
+	   2) quite ---------> Esc + q
+h- variables and shell
+	- variables in Linux
+	- creating shell variables
+	- displaying variables
+	- promoting shell variable to environment variable
+	- creating environment variable
+	- Displaying environment variables
+	- Deleting variables
+
+
+✅ ملخص سريع بالأوامر:
+الوظيفة				الأمر
+إنشاء متغير بيئي		export VAR_NAME="value"
+عرض متغير بيئي		printenv VAR_NAME أو echo $VAR_NAME
+عرض كل المتغيرات البيئية		printenv
+حذف متغير			unset VAR_NAME
+
+
+i- Configuring Bash 
+	- PATH environment Variables
+	- history command
+	- which command
+	- Re-executing commands !!
+	- creating Aliases
+	- Displaying Aliases
+	- Deleting Aliases
+	- Customizing the prompt 
+
+
+
+🔵 i - Configuring Bash
+يعني: إزاي تزبط بيئة الشغل بتاعتك في الـ Bash Shell بحيث تشتغل بسرعة وكفاءة وسلاسة.
+
+✅ 1. PATH Environment Variable
+📌 يعني إيه؟
+$PATH هو متغير بيئي بيقول للـ Shell:
+
+"لما تكتب أمر (زي ls أو python)، فتّش عليه فين؟"
+
+🧪 مثال:
+echo $PATH
+🔹 هيطبع مسارات زي:
+/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/home/mazen/scripts
+📌 ليه مهم؟
+لو عندك سكريبت أو برنامج جديد، وعايز تشغله من أي مكان، تحط مساره في $PATH.
+
+🧪 مثال عملي:
+export PATH=$PATH:/home/mazen/mytools
+كده أي سكريبت جوه mytools/ تقدر تشغله من أي مكان.
+
+✅ 2. history Command
+📌 يعني إيه؟
+بيعرضلك كل الأوامر اللي كتبتها قبل كده في التيرمنال.
+
+🧪 مثال:
+history
+🔹 هيطبع:
+1  cd Downloads
+2  nano test.txt
+3  sudo apt update
+📌 ليه مفيد؟
+تشوف أنت عملت إيه.
+
+تعيد تشغيل أوامر طويلة بسهولة.
+
+✅ 3. which Command
+📌 يعني إيه؟
+بيقولك الأمر اللي بتكتبه جاي منين.
+
+🧪 مثال:
+which python
+🔹 النتيجة:
+/usr/bin/python
+📌 ليه مهم؟
+علشان تتأكد أنت بتستخدم أي نسخة من البرنامج، خصوصًا لما يكون فيه أكتر من نسخة مثبتة.
+
+✅ 4. Re-executing commands (!!)
+📌 يعني إيه؟
+تشغّل آخر أمر كتبته.
+
+🧪 مثال:
+!!    # يعيد تنفيذ آخر أمر
+!ls   # يعيد آخر أمر بدأ بـ ls
+📌 مفيد إمتى؟
+لو نسيت تكتب sudo مثلاً:
+apt update   # هيقولك permission denied
+sudo !!      # يعيد الأمر اللي فات بـ sudo
+✅ 5. Creating Aliases
+📌 يعني إيه؟
+الـ Alias = اسم مختصر لأمر كبير.
+
+🧪 مثال:
+alias cls='clear'
+alias ll='ls -la --color=auto'
+دلوقتي لو كتبت ll، هيشتغل كأنك كتبت ls -la --color=auto
+
+✅ 6. Displaying Aliases
+alias      # يعرض كل aliases اللي عندك
+✅ 7. Deleting Aliases
+unalias ll
+✅ 8. Customizing the Prompt
+📌 يعني إيه؟
+PS1 هو المتغير اللي بيتحكم في شكل الـ prompt (السطر اللي بتكتب فيه الأوامر).
+
+🧪 مثال:
+export PS1="\u@\h:\w$ "
+🔹 ده هيخلي الباش يظهر كده:
+mazen@kali:~/Desktop$
+📌 الرموز المهمة:
+الرمز	المعنى
+\u	اسم المستخدم
+\h	اسم الجهاز
+\w	المسار الحالي
+
+🟢
+
+j- User Security 
+	- Users and Groups 
+	- Displaying User and Group information
+	- Displaying Group information 
+	- Becoming the SuperUser
+	- Becoming a Different User
+	- Changing File Ownership
+	- Changing a File's Group Ownership
+	 Learning Who is Logged In
+k- Managing Users
+	- Essential files for users and groups 
+	- Adding, Deleting , Modifying user account
+	- Managing groups
+	- password aging 
+	- /etc/skel directory 
+	- Locking an account 
+	- Grphical user and group administration
+l- File Security
+	-Permissions 
+	-Permission Category
+	- Permission Types
+	- Changing Permission 
+m- file systems
+	- File System Types 
+	- Device Naming and spacing
+	- Mounting File Systems
+	- Monitoring Disk Space
+	- Checking File System Integrity
+n- Disk Quotas
+	- Disk Quotas
+	- Limits 
+	- Steps to enable Quotas
+	- Viewing Quotas Usage
+o- Archiving 
+	- Backup Media 
+	- Types of Backup	
+	- Archiving and Extracting files using tar
+p- Process Control 
+	- Job Control 
+	- Keeping track for jobs
+	- Running Jobs in background
+	- Running Jobs in foreground
+	- Listing Processes 
+	- Monitoring Processes 
+	- Sending signals to processes
+	- Terminating Processes
+	- Process priorities
+q- Scheduling tasks
+	- Running Tasks at a specific time --at
+	- Scheduling recurring tasks -corn 
+	- Restricting access to task scheduling
+r- Booting Up 
+	- The boot sequence 
+	- the init process 
+	- Runlevels
+	- changing Runlevels 
+	- Changing the default runlevels 
+s- Log files
+	- Log file and rsyslogd Daemon
+	- Configuring rsyslogd -- rsyslog.conf 
+	- Log Utilities
+	- Log Rotation
+	- Graphical Tool
+t- Installation 
+	- Hardware requirements 
+	- Downloading CentOS
+	- Planning the Disk Layout
+	- The Installation Process 
+u- Boot Managers 
+	- Boot Loaders 
+	- Master Boot Record 
+	- LILO
+	- GRUP
+
+
+
+
+
+
+	

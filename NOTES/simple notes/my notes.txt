@@ -1,0 +1,116 @@
+well known ports -------------> 1024
+______________________________________________________________________________________________________________________________________
+1 What networking constructs are used to direct traffic to the right application on a server?
+Ports
+______________________________________________________________________________________________________________________________________
+2 If you wanted to detect which operating system the target is running on, which switch would you use?
+-O
+______________________________________________________________________________________________________________________________________
+3 Nmap provides a switch to detect the version of the services running on the target. What is this switch?
+-sV
+______________________________________________________________________________________________________________________________________
+4 Verbosity level one is good, but verbosity level two is better! How would you set the verbosity level to two?
+-vv 
+verbosity -------------------> الاسهاب او التطويل
+______________________________________________________________________________________________________________________________________
+
+We should always save the output of our scans -- this means that we only need to run the scan once (reducing network traffic and thus chance of detection), and gives us a reference to use when writing reports for clients.
+
+5-What switch would you use to save the Nmap results in three major formats?
+-oA
+
+6-What switch would you use to save the Nmap results in a “normal” format?
+-oN
+
+7-A very useful output format: how would you save results in a “grepable” format?
+-oG
+______________________________________________________________________________________________________________________________________
+8 If we don't care about how loud we are, we can enable "aggressive" mode
+ his is a shorthand switch that activates service detection, operating system detection, a traceroute and common script scanning. How would you activate this setting?
+-A
+______________________________________________________________________________________________________________________________________
+
+9 How would you set the timing template to level 5?
+-T5
+ These are essentially used to increase the speed your scan runs at. Be careful though: higher speeds are noisier, and can incur errors!
+______________________________________________________________________________________________________________________________________
+
+10 How would you tell Nmap to only scan port 80?
+-p 80
+______________________________________________________________________________________________________________________________________
+
+11 How would you tell Nmap to scan ports 1000–1500?
+-p 1000–1500
+______________________________________________________________________________________________________________________________________
+
+12 How would you tell Nmap to scan all ports?
+-p-
+______________________________________________________________________________________________________________________________________
+
+13 How would you activate a script from the Nmap scripting library (lots more on this later!)?
+— script
+______________________________________________________________________________________________________________________________________
+
+14 How would you activate all of the scripts in the “vuln” category?
+— script=vuln
+
+_______________________________________________________________15-When a UDP port is closed, by convention the target should send back a "port unreachable" message. Which protocol would it use to do so?
+
+ICMP
+_______________________________________________________________
+16- any syn scan needs a sudo before it like sudo nmap -sS
+_______________________________________________________________
+17-		========> HTTrack <===========
+is a popular open-source website copier tool that allows you to download a website from the internet to your local machine. It creates a complete local mirror of the website, including its directory structure, HTML, images, stylesheets, and other resources, so you can browse the site offline.
+
+Key Features of HTTrack:
+Download Entire Websites:
+
+HTTrack clones a website's structure, replicating its file hierarchy and saving pages locally.
+Recursive Downloading:
+
+It can follow internal links and download multiple levels of pages, depending on the depth specified.
+File Type Filters:
+
+You can specify which types of files to download (e.g., only HTML and images or include PDFs and videos).
+Resumption of Interrupted Downloads:
+
+If the download process is interrupted, HTTrack can resume from where it left off.
+Customizable Options:
+
+Includes settings for user-agent strings, bandwidth throttling, download speed limits, and more.
+Preserves Link Structure:
+
+Converts links in the downloaded site to work locally, enabling smooth offline navigation.
+Example of How to Use HTTrack:
+From the command line:
+
+httrack "http://example.com" -O /path/to/directory
+
+http://example.com: The target website URL.
+-O /path/to/directory: Specifies the local directory where the downloaded files will be saved.
+_______________________________________________________________
+18- ========>  EmailTrackPro  <===========
+is a tool used for tracking and managing email interactions. 
+
+_______________________________________________________________
+19- 	 ========>  SecurityTrails <===========
+ is a cybersecurity platform that provides comprehensive tools for gathering and analyzing domain, IP, and DNS-related information. It is widely used by security professionals, researchers, and IT teams for purposes such as threat intelligence, attack surface management, and security assessments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+web application
+
+
+command execution ----------> بتكون عبارة عن اني بحط اكواد وبنفذها

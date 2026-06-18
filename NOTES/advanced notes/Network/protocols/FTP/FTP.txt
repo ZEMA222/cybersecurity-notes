@@ -1,0 +1,120 @@
+🔁 Connection & Session Commands
+Command	Description
+open <host> => Connect to an FTP server
+close => Close the current connection
+quit or bye => Exit the FTP session
+user <username> <password> => Login manually with credentials
+pass <password> => Send password (used after user)
+
+📁 Directory Navigation
+Command	Description
+ls or dir =>	List files and folders on the server
+cd <dir> =>	Change directory on the remote server
+lcd <dir> =>	Change directory on the local machine
+pwd	=>	Show current directory on the server
+lpwd	=>	Show current directory on your local machine
+
+📥 Downloading Files
+Command	Description
+get <filename> =>	Download a single file from server
+mget <file1> <file2> ...  =>	Download multiple files
+
+📤 Uploading Files
+Command	Description
+put <filename> =>	Upload a single file to the server
+mput <file1> <file2> ... =>	Upload multiple files
+
+🛠️ File & Transfer Settings
+Command	Description
+binary =>	Set transfer mode to binary (recommended for most files)
+ascii =>	Set transfer mode to ASCII (for text files)
+status =>	Show current transfer mode and connection info
+prompt =>	Toggle interactive prompting on/off for mget/mput
+hash =>		Show a # symbol for each data block transferred
+bell => 	Ring the terminal bell when command finishes
+
+🗑️ File Management on Server
+Command	Description
+delete <filename> =>	Delete a file on the server
+mkdir <directory> =>	Create a new directory on the server
+rmdir <directory> =>	Remove a directory from the server
+rename <old> <new> =>	Rename a file on the server
+
+📘 Command:
+verbose
+✅ What it does:
+Turns on/off detailed information about each FTP command and response from the server.
+
+Useful for debugging or understanding what’s happening behind the scenes.
+
+If you're using Linux or Kali, most of these work in the default ftp command-line client.
+If you're using lftp, it supports more advanced features like parallel downloads.
+
+
+تمام يا نجم، لو عايز تشغل أو تعدّل على سيرفر FTP باستخدام vsFTPd (Very Secure FTP Daemon)، فده السيرفر الأشهر في لينوكس لتشغيل FTP.
+تعالى أقولك إزاي تشتغل عليه وتعدّل في ملف الإعدادات بتاعه.
+
+📦 أولًا: تثبيت vsFTPd على كالي أو أي توزيعة ديبيان:
+
+sudo apt update
+sudo apt install vsftpd
+📁 ثانيًا: ملف الإعدادات
+المكان الرئيسي لملف الإعدادات:
+
+
+/etc/vsftpd.conf
+تقدر تعدله بأي محرر:
+
+
+sudo nano /etc/vsftpd.conf
+🛠️ أهم الإعدادات اللي ممكن تحتاجها:
+الإعداد	المعنى
+listen=YES	يشغّل السيرفر في وضع standalone
+anonymous_enable=YES	يسمح بتسجيل الدخول كمجهول (anonymous)
+local_enable=YES	يسمح للمستخدمين المحليين بتسجيل الدخول
+write_enable=YES	يسمح برفع الملفات أو تعديلها
+local_umask=022	صلاحيات الملفات المرفوعة
+chroot_local_user=YES	يمنع المستخدم المحلي يطلع برا فولدره
+user_sub_token=$USER	يستخدم اسم المستخدم في الباث
+local_root=/home/$USER/ftp	يحدد الفولدر اللي المستخدم يشوفه
+pasv_enable=YES	يفعّل passive mode (مهم للشبكات المقيدة)
+pasv_min_port=10000 و pasv_max_port=10100	يحدد رينج البورتات للـ passive mode
+
+👨‍🔧 مثال على إعداد شائع:
+listen=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+chroot_local_user=YES
+local_umask=022
+user_sub_token=$USER
+local_root=/home/$USER/ftp
+pasv_enable=YES
+pasv_min_port=10000
+pasv_max_port=10100
+🔄 ثالثًا: إعادة تشغيل السيرفر بعد التعديل:
+
+sudo systemctl restart vsftpd
+تقدر كمان تتأكد إنه شغال:
+sudo systemctl status vsftpd
+🔐 نصايح أمان سريعة:
+اقفل anonymous login لو مش محتاجه:
+anonymous_enable=NO
+فعّل chroot_local_user=YES عشان تمنع كل يوزر يشوف غير فولدره.
+
+استخدم passive mode لو هتشغل السيرفر وعايز تتجنب مشاكل NAT/firewall.
+
+📦 إضافة يوزر للتجربة:
+sudo useradd -m ftpuser
+sudo passwd ftpuser
+mkdir /home/ftpuser/ftp
+chmod 750 /home/ftpuser/ftp
+
+
+
+
+
+
+
+
+

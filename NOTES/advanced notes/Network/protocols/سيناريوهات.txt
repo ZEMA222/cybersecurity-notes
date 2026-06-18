@@ -1,0 +1,95 @@
+🔹 FTP (Port 21)
+
+Plaintext Credentials: اليوزر والباسورد بيتبعتوا من غير تشفير.
+
+Anonymous Login: ساعات بيسمح بدخول user: anonymous بدون باسورد.
+
+Brute Force: سهل يتجرب بكلمة مرور.
+
+Misconfiguration: ملفات حساسة متاحة للتحميل.
+
+🔹 SSH (Port 22)
+
+Brute Force: تجربة كلمات سر ضعيفة.
+
+Default Keys: في بعض الأجهزة القديمة نفس الـ keys بتتكرر.
+
+Version Vulnerabilities: إصدارات قديمة من OpenSSH فيها ثغرات RCE أو DoS.
+
+Misconfigured Permissions: ملفات private keys متاحة للقراءة.
+
+🔹 SMB (Port 445, 139)
+
+Anonymous/Guest Access: مشاركة ملفات بدون صلاحيات.
+
+EternalBlue (MS17-010): RCE شهيرة في Windows.
+
+Pass-the-Hash: استخدام Hash للدخول بدل الباسورد.
+
+Sensitive Shares: ملفات أو بيانات حساسة متاحة على shares.
+
+🔹 NFS (Port 111, 2049)
+
+No Root Squash: يسمح لليوزر root على جهازك يبقى root على السيرفر.
+
+Misconfigured Exports: مجلدات متاحة لأي IP.
+
+Unauthorized Access: ممكن تعمل mount على ملفات حساسة.
+
+🔹 SMTP (Port 25)
+
+Open Relay: إرسال إيميلات بدون قيود (Spam).
+
+User Enumeration: اكتشاف الإيميلات الصحيحة بالـ VRFY و RCPT.
+
+Spoofing: تزوير عنوان المرسل.
+
+Software Vulnerabilities: زي CVE-2020-7247 في OpenSMTPD → RCE.
+
+🔹 SNMP (Port 161/162)
+
+Default Community Strings: زي public و private.
+
+Information Disclosure: يسرب usernames, network interfaces, processes.
+
+Brute Force: تجربة Community Strings مختلفة.
+
+Weak Access Control: مفيش قيود مين يوصل للـ SNMP.
+
+🔹 TELNET (Port 23)
+
+Plaintext Authentication: اليوزر والباسورد بيتبعتوا بدون تشفير.
+
+Brute Force: سهل يتجرب.
+
+Weak ACLs: السماح بالدخول من أي IP.
+
+Outdated Protocol: غير آمن مقارنة بـ SSH.
+
+🔹 DHCP (Port 67/68)
+
+DHCP Starvation Attack: المهاجم يستهلك كل IPs.
+
+Rogue DHCP Server: المهاجم ينشئ سيرفر وهمي ويوزع IPs خبيثة.
+
+DoS: تعطيل الخدمة.
+
+🔹 HTTP (Port 80)
+
+Sensitive Information Disclosure: ملفات مخزنة أو headers.
+
+Default Credentials: لو web panels مش معمولة secure.
+
+Injection Attacks: زي SQLi, XSS, Command Injection.
+
+Directory Traversal: الوصول لملفات خارج المسار المسموح.
+
+🔹 HTTPS (Port 443)
+
+SSL/TLS Misconfiguration: بروتوكولات ضعيفة (SSLv2, SSLv3).
+
+Expired/Invalid Certificates: تسهل الـ MITM.
+
+Heartbleed (OpenSSL Bug): تسريب بيانات حساسة من الـ memory.
+
+Mixed Content: تحميل عناصر غير مشفرة من HTTP داخل HTTPS.
