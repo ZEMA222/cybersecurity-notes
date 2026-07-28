@@ -1,0 +1,128 @@
+🧠 🎯 Scenario: 3 Routers using RIP
+🔹 Topology
+PC1 --- R1 --- R2 --- R3 --- PC2
+🔹 IP Addressing
+🖥 PC1
+
+IP: 192.168.1.2
+
+Mask: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+🖥 PC2
+
+IP: 192.168.3.2
+
+Mask: 255.255.255.0
+
+Gateway: 192.168.3.1
+
+🌐 R1
+Interface	IP
+G0/0	192.168.1.1/24
+G0/1	10.0.12.1/30
+🌐 R2
+Interface	IP
+G0/0	10.0.12.2/30
+G0/1	10.0.23.1/30
+🌐 R3
+Interface	IP
+G0/0	10.0.23.2/30
+G0/1	192.168.3.1/24
+🛠 Step 1: Configure Interfaces
+🔹 R1
+enable
+conf t
+
+interface g0/0
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+
+interface g0/1
+ip address 10.0.12.1 255.255.255.252
+no shutdown
+🔹 R2
+enable
+conf t
+
+interface g0/0
+ip address 10.0.12.2 255.255.255.252
+no shutdown
+
+interface g0/1
+ip address 10.0.23.1 255.255.255.252
+no shutdown
+🔹 R3
+enable
+conf t
+
+interface g0/0
+ip address 10.0.23.2 255.255.255.252
+no shutdown
+
+interface g0/1
+ip address 192.168.3.1 255.255.255.0
+no shutdown
+🚀 Step 2: Configure RIP (Version 2)
+
+نستخدم Routing Information Protocol Version 2 علشان يدعم subnet mask.
+
+🔹 R1
+router rip
+version 2
+no auto-summary
+network 192.168.1.0
+network 10.0.12.0
+🔹 R2
+router rip
+version 2
+no auto-summary
+network 10.0.12.0
+network 10.0.23.0
+🔹 R3
+router rip
+version 2
+no auto-summary
+network 10.0.23.0
+network 192.168.3.0
+🧪 Step 3: Test
+
+من PC1 اعمل:
+
+ping 192.168.3.2
+
+المفروض يشتغل ✔️
+
+🔥 تأكد من الـ Routing Table
+
+اكتب على أي راوتر:
+
+show ip route
+
+هتلاقي الراوتات مكتوب جنبها:
+
+R
+
+يعني جاية من RIP.
+
+
+
+	<<<<<<<PASSSIVE INTERFACE>>>>>>>
+
+router rip
+version 2
+network 192.168.1.0
+passive-interface g0/0
+
+هنا: g0/0 مش هيبعت RIP updates
+
+بس لو فيه interface تاني على R1 بيربطه براوتر تاني → مش Passive، يبعت updates
+
+
+| نوع الشبكة             | Passive؟                      |
+| ---------------------- | ----------------------------- |
+| LAN (PCs فقط)          | ✅ Passive                     |
+| WAN / Router-to-Router | ❌ Active (لازم updates تنتقل) |
+
+

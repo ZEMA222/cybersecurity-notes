@@ -1,0 +1,738 @@
+🔹 Static NAT
+
+Maps one specific private IP to one specific public IP permanently.
+
+It’s a fixed One-to-One relationship.
+
+Always uses the same public IP when going outside.
+
+🔹 Dynamic NAT
+
+Uses a pool of public IPs.
+
+Each private IP is translated to an available public IP from the pool temporarily.
+
+The mapping changes based on availability and is not fixed.
+
+
+_______________________________________________________
+
+Default Gateway = عنوان راوتر الجهاز (الكومبيوتر او السيرفر) بيستخدمه كباب للخروج.
+
+Default Route = مسار على الراوتر يحدد هو كمان هيبعت الترافيك لمين لو مش عارف وجهته.
+
+_______________________________________________________
+
+
+
+
+
+| المصطلح       	     |	معناه 								   |	مثال
+
+| ------------- | ------------------------------------- | ---------------------------------------------- |
+| Static Route  | طريق بتحدده يدوي               				  | ip route 192.168.2.0 255.255.255.0 192.168.1.1 |
+| Default Route | الطريق اللي نمشي فيه لما نحتار   			 | ip route 0.0.0.0 0.0.0.0 192.168.1.1           |
+| AD 		| أولوية الثقة بين أنواع الطرق المختلفة 			| Static = 1، OSPF = 110، RIP = 120              |
+
+
+
+
+OSPF Process
+│
+├── Step 1: Neighbor Discovery (Hello Packets)
+├── Step 2: Exchange LSAs
+│       ├── LSA 1: Router LSA (Inside Area)
+│       └── LSA 3: Summary LSA (Between Areas via ABR)
+├── Step 3: Build Link State Database (LSDB)
+├── Step 4: Run SPF (Dijkstra Algorithm)
+└── Step 5: Update Routing Table
+
+
+
+
+OSPF = بروتوكول بيعتمد على الخريطة الكاملة للشبكة.
+
+LSA = إعلان بيقول للراوترات التانية "أنا شايف إيه".
+
+LSDB = المكان اللي بيتخزن فيه كل الإعلانات.
+
+SPF Algorithm = اللي بيحسب أقصر طريق ويضيفه في الـ Routing Table.
+
+
+6. Neighbor States
+
+دي بتيجي كتير في الامتحان:
+
+Down → لسه مفيش اتصال.
+
+Init → استقبل Hello بس لسه مش اتفقوا.
+
+2-Way → اتفقوا وبقوا Neighbors.
+
+ExStart → بيحددوا مين Master ومين Slave.
+
+Exchange → بيبدلوا Database Description.
+
+Loading → بيتبادلوا LSAs.
+
+Full → بقوا تمام، LSDB متطابق.
+
+
+🔥 الخلاصة:
+
+لو شبكة صغيرة جدًا = RIP ممكن يمشي.
+
+لو شبكة متوسطة/كبيرة = OSPF هو الحل.
+
+لو Cisco-only Network وعايز حاجة Efficient = EIGRP.
+
+لو Internet scale = BGP.
+
+
+
+
+
+
+
+
+___________________________________________________
+
+🎯 أهم حاجات لازم تبقى فاهمها عن OSPF:
+
+1. Areas
+
+OSPF بيتقسم لـ Areas عشان يقلل حجم الترافيك والـ LSDB.
+
+Backbone Area (Area 0): لازم كل الـ Areas يتوصلوا بيها.
+
+أي Area
+ غير Area 0 
+تعتبر Non-backbone.
+
+
+
+---
+
+2. Router Types
+
+Internal Router: جواه شبكات لكن شغال في Area واحدة.
+
+ABR (Area Border Router): شغال بين Area 0 و Area تانية.
+
+ASBR (Autonomous System Boundary Router): بيطلع/يدخل ترافيك من بره OSPF (مثلاً من EIGRP أو RIP).
+
+Backbone Router: شغال في Area 0.
+
+
+
+---
+
+3. DR/BDR (Designated Router & Backup DR)
+
+لو الشبكة Multi-Access
+ (زي Ethernet)، مش ينفع كل راوتر يتكلم مع كل راوتر → هيبقى فيه فوضى.
+
+OSPF يختار 
+DR و BDR.
+
+كل راوتر يتكلم مع 
+DR و BDR بس
+ يقلل الترافيك
+
+
+
+---
+
+4. OSPF Metrics
+
+بيستخدم Cost كـ Metric.
+
+Cost = 100 Mbps ÷ Bandwidth.
+(مثلاً لو عندك Link بسرعة 10 Mbps → Cost = 100/10 = 10).
+
+أقل Cost = أقصر مسار.
+
+
+
+---
+
+5. Timers
+
+Hello Timer = 10 ثواني (افتراضي في Ethernet).
+
+Dead Timer = 40 ثانية.
+
+لازم الـ Timers تبقى متطابقة عشان الراوترات يبقوا Neighbors.
+
+
+
+---
+
+6. Neighbor States
+
+دي بتيجي كتير في الامتحان:
+
+Down → لسه مفيش اتصال.
+
+Init → استقبل Hello بس لسه مش اتفقوا.
+
+2-Way → اتفقوا وبقوا Neighbors.
+
+ExStart → بيحددوا مين Master ومين Slave.
+
+Exchange → بيبدلوا Database Description.
+
+Loading → بيتبادلوا LSAs.
+
+Full → بقوا تمام، LSDB متطابق.
+
+
+
+---
+
+📌 إمتى نلجأ للـ OSPF؟
+
+لما الشبكة تكبر (أكتر من 15 hop → RIP مش هينفع).
+
+عايز بروتوكول سريع في الـ Convergence (OSPF أسرع من RIP).
+
+لما الشبكة كبيرة ومعقدة وعايز تقسيم Areas عشان الأداء.
+
+محتاج Standard Protocol (مش زي EIGRP اللي Proprietary عند Cisco).
+
+لما تحب تعمل Hierarchical Design (Backbone Area + Non-backbone Areas).
+
+
+
+---
+
+🆚 مقارنة سريعة مع غيره:
+
+RIP: سهل جدًا بس بيوقف عند 15 hop، بطيء، مش عملي للشبكات الكبيرة.
+
+EIGRP: أسرع من OSPF وأسهل في بعض السيناريوهات، بس مش Standard (Cisco Proprietary).
+
+BGP: مش للـ LANs، ده بيستخدم أكتر في الـ Internet/ISP.
+
+
+
+---
+
+🔥 الخلاصة:
+
+لو شبكة صغيرة جدًا = RIP ممكن يمشي.
+
+لو شبكة متوسطة/كبيرة = OSPF هو الحل.
+
+لو Cisco-only Network وعايز حاجة Efficient = EIGRP.
+
+لو Internet scale = BGP.
+
+
+
+---
+___________________________________________________
+
+🎯 Unicast
+
+رسالة من جهاز واحد لجهاز واحد فقط.
+
+الـ switch يبعثها على بورت واحد محدد (لو الـ MAC معروف في الـ MAC Table).
+
+أكتر نوع مستخدم في الشبكات (تصفح إنترنت، إرسال ملف، اتصال SSH…).
+
+كفاءة عالية لأنه ما بيوصلش لحد مش محتاج الرسالة.
+
+
+Note: if the mac table doesn't have the dst mac it will make 
+===== broadcast flooding in the 1st time only.
+
+
+---
+
+📡 Broadcast
+
+رسالة من جهاز واحد لكل الأجهزة في نفس الـ VLAN / Broadcast Domain.
+
+Destination MAC: FF:FF:FF:FF:FF:FF.
+
+كل الأجهزة تستقبلها حتى لو مش مهتمة.
+
+أمثلة: ARP Request, DHCP Discover.
+
+مشكلة: يستهلك موارد الشبكة وممكن يعمل Broadcast Storm.
+
+
+
+---
+
+👥 Multicast
+
+رسالة من جهاز واحد لمجموعة أجهزة معينة (مش كل الشبكة).
+
+الأجهزة اللي عايزة الرسالة بتنضم للجروب (IGMP).
+
+السويتش مع IGMP Snooping يبعتها بس للمشتركين، غير كده يتعامل معاها كـ Broadcast.
+
+أمثلة: OSPF Hello Packets, IPTV, Video Conference.
+
+مميز: أوفر من Broadcast، وكفء لو عدد المشتركين كبير.
+___________________________________________________
+		VLAN
+		====
+إيه هي الـ VLAN؟
+
+VLAN = Virtual LAN = شبكة محلية افتراضية.
+
+بدل ما يكون عندك سويتش واحد وكل الأجهزة متوصلة فيه تبقى كلها شبكة واحدة (broadcast domain واحد)، الـ VLAN بتقسم السويتش ده لعدة شبكات منطقية.
+
+يعني كأنك جبت أكتر من سويتش بس بشكل افتراضي من غير ما تشتري عتاد جديد.
+
+
+
+
+                [ Switch ]
+         +-----------------------+
+         | Fa0/1 → VLAN 10 (HR) |
+         | Fa0/2 → VLAN 10 (HR) |
+         | Fa0/3 → VLAN 20 (IT) |
+         | Fa0/4 → VLAN 20 (IT) |
+         +-----------------------+
+             |       |       |       |
+             |       |       |       |
+          PC1      PC2     PC3     PC4
+        (HR)     (HR)     (IT)     (IT)
+   192.168.10.2   192.168.10.3   192.168.20.2   192.168.20.3
+      VLAN 10       VLAN 10         VLAN 20        VLAN 20
+
+
+
+
+
+
+
+
+🔹 Access Port
+
+بيبقى مربوط بجهاز عادي (PC, Printer, Server).
+
+بيكون تابع لـ VLAN واحدة بس.
+
+أي Traffic يوصله/يخرجه بيكون un-tagged (من غير VLAN Tag).
+
+مثال:
+
+Fa0/1 معمول كـ access port في VLAN 10.
+
+يبقى أي PC متوصل هناك هيعتبر نفسه في VLAN 10.
+
+🔹 Trunk Port
+
+بيتوصل بين Switch ↔ Switch أو Switch ↔ Router.
+
+بيشيل أكتر من VLAN في نفس الكابل.
+
+الـ Frames بتعدي ومعاها VLAN Tag (802.1Q) عشان يميزها.
+
+مثال:
+
+لو عندك VLAN 10 و VLAN 20 على Switch1.
+
+وعايز توصلهم بـ Switch2 بنفس الـ VLANs.
+
+لازم تخلي اللينك بينهم trunk عشان ينقل الترافيك بتاع VLAN10 و VLAN20 في نفس الوقت.
+
+
+
+🔹 Why VLAN?
+
+Security: Devices in HR can be isolated from other departments.
+
+Reduce Broadcast Traffic: Each VLAN is its own broadcast domain.
+
+Management: Easier to group devices from the same department, even if they are in different offices.
+
+🔹 Practical Scenario in Packet Tracer
+
+The company has 2 departments:
+
+HR Department → VLAN 10
+
+IT Department → VLAN 20
+
+Setup:
+
+One Switch connected to 4 PCs.
+
+PC1, PC2 = HR (VLAN 10).
+
+PC3, PC4 = IT (VLAN 20).
+
+👉 With this setup:
+
+PC1 ↔ PC2 can communicate (same VLAN).
+
+PC3 ↔ PC4 can communicate (same VLAN).
+
+PC1 ↔ PC3 cannot communicate (different VLANs) unless you configure Inter-VLAN Routing (using a router or Layer 3 switch).
+         [ Switch1 ]                         [ Switch2 ]
+     +-----------------+                 +-----------------+
+ PC1 | Fa0/1 Access    |                 | Fa0/1 Access    | PC3
+VLAN10| VLAN 10        |                 | VLAN 10         | VLAN10
+     |                 |                 |                 |
+ PC2 | Fa0/2 Access    |                 | Fa0/2 Access    | PC4
+VLAN20| VLAN 20        |                 | VLAN 20         | VLAN20
+     +-----------------+                 +-----------------+
+              |                                   |
+              |<----------- Trunk --------------->|
+              |       (carries VLAN 10 & 20)      |
+
+
+
+
+🔹 Native VLAN
+
+في الـ Trunk link (IEEE 802.1Q) أي Frame بيعدي من غير Tag بيتفسر إنه رايح على الـ Native VLAN.
+
+يعني الـ Native VLAN هي VLAN "الافتراضية" اللي بتستقبل/تبعت الترافيك un-tagged.
+
+🔹 الإعداد الافتراضي
+
+في Cisco Switches → الـ Native VLAN = VLAN 1 بشكل افتراضي.
+
+يعني لو بعتت Frame untagged على Trunk port → السويتش هيعتبرها تابعة لـ VLAN1.
+
+🔹 ليه بنحتاج Native VLAN؟
+
+عشان بعض الأجهزة القديمة أو البروتوكولات (زي CDP, VTP, STP BPDU) بتبعت Frames untagged.
+
+الـ Native VLAN بتضمن إن الـ Frames دي تلاقي طريقها وتتفسر صح.
+
+🔹 مشكلة لو Native VLAN مش متطابقة
+
+لو عندك Switch1 و Switch2 متوصلين Trunk:
+
+Switch1: Native VLAN = 10
+
+Switch2: Native VLAN = 20
+
+أي Frame untagged يعدي في النص → Switch1 يفسره VLAN10، Switch2 يفسره VLAN20 → كده يحصل misconfiguration ومشاكل كبيرة في الشبكة.
+
+___________________________________________________
+
+الأول: يعني إيه Flooding أصلاً؟
+
+في الـ Switch:
+
+لو وصله Frame (زي broadcast أو unknown unicast أو multicast).
+
+ومش عارف الماك (MAC) ده فين.
+
+هيبعت الـ Frame على كل البورتات اللي في نفس الـ VLAN (ما عدا البورت اللي جاله منه).
+وده اللي اسمه Flooding.
+
+🔹 Flooding مع الـ Trunk Port
+
+الـ Trunk port بيشيل أكتر من VLAN، عشان كده:
+
+لو جاله Broadcast من VLAN 10 مثلًا:
+
+مش هيبعتها لكل VLAN.
+
+هيبعتها بس على كل الـ Ports (Access + Trunk) اللي تخص VLAN 10.
+
+وبما إن trunk port شايل VLANات متعددة → هيعدي الـ Frame ومعاه Tag = VLAN 10 عشان الـ Switch التاني يفهم إن الـ Broadcast ده يخص VLAN 10 بس.
+
+
+
+💡 النقطة المهمة:
+
+Flooding في trunk port بيحصل "لكل VLAN لوحدها".
+
+مش معناه إن الـ Broadcast هيعدي لكل VLAN → لأ، هيعدي بس للـ VLAN اللي تخص الـ Frame.
+
+
+
+___________________________________________________
+
+🔹 إيه هو Spanning Tree Protocol (STP)؟
+
+هو بروتوكول layer 2 (على السويتشات) وظيفته يمنع Loop في الشبكة.
+
+🔹 ليه محتاجينه؟
+
+لما توصل سويتشات ببعض بأكتر من link (عشان redundancy)، بيحصل Loop:
+
+الـ Broadcast frames هتفضل تلف للأبد (Broadcast Storm 🌪️).
+
+MAC address table يحصلها instability (العنوان يتغير كل ثانية).
+
+الشبكة ممكن تنهار كلها.
+
+STP بيحل المشكلة دي إنه يخلي في Path واحد active والباقي يخليهم Blocked، ولو الـ Active path وقع → يفتح path تاني.
+
+🔹 إزاي بيشتغل STP؟
+
+انتخاب Root Bridge
+
+السويتشات بتبعت رسائل اسمها BPDU (Bridge Protocol Data Units).
+
+كل سويتش ليه Bridge ID (Priority + MAC).
+
+السويتش اللي أقل Bridge ID → يبقى Root Bridge.
+
+تحديد Root Port (على كل سويتش)
+
+هو الـ Port اللي أقرب طريق للـ Root Bridge.
+
+تحديد Designated Port
+
+هو الـ Port المسؤول عن توصيل الترافيك للـ segment ده.
+
+باقي البورتات → بتدخل حالة Blocking (عشان تمنع الـ loop).
+
+🔹 حالات البورت في STP
+
+Blocking → البورت واقف.
+
+Listening → بيسمع BPDU.
+
+Learning → بيبدأ يحفظ MAC addresses.
+
+Forwarding → البورت بيشتغل فعليًا.
+
+Disabled → مقفول manually.
+
+
+
+
+
+
+___________________________________________________
+
+
+
+🔹 1. Root Port (RP)
+
+Exists on every switch except the Root Bridge.
+
+It’s the shortest path to the Root Bridge.
+
+Each switch calculates the lowest path cost to reach the Root Bridge, and the interface that provides this path becomes the Root Port.
+
+There is only one Root Port per switch.
+
+🔹 2. Designated Port (DP)
+
+Exists in every segment (the link between two switches).
+
+It’s the port responsible for forwarding traffic from that segment toward the Root Bridge.
+
+There can be multiple Designated Ports in the network (one per segment).
+
+A Designated Port is always in the Forwarding state.
+
+🔹 Simplified difference
+
+Root Port (RP): The port a switch uses to reach the Root Bridge (like the main exit door).
+
+Designated Port (DP): The port responsible for forwarding traffic into a segment toward the Root Bridge (like the gatekeeper of each road).
+
+
+   +---------+
+   | Switch1 |
+   +----+----+
+        | (Root Bridge)
+        |   (DP)
+   +----+----+
+   | Switch2 |
+   +----+----+
+   |   DP    | 
+   |         |
+   |   RP    |
+   +----+----+
+   | Switch3 |
+   +---------+
+
+Alternate Port → backup path to the Root Bridge (secondary root port).
+
+Backup Port → backup path to the same segment (secondary designated port).
+
+___________________________________________________
+🔹 What is PortFast?
+
+PortFast is a feature in Cisco switches that is applied on Access Ports (ports connected to end devices like PCs, printers, or servers — not other switches).
+
+Its purpose is to make the port become active immediately, without going through all the normal STP states (Listening → Learning → Forwarding).
+
+As soon as a device is connected, the port jumps straight into the Forwarding state.
+
+🔹 ليه محتاجينه؟
+
+STP في الطبيعي بياخد حوالي 30–50 ثانية عشان البورت يدخل Forwarding بعد ما يتوصل (Listening + Learning timers).
+ده بيبقى مشكلة لو جهاز زي PC أو DHCP client اتوصل:
+
+الكمبيوتر يشتغل أسرع من البورت، فيفشل ياخد IP من الـ DHCP.
+
+المستخدم يحس إن الشبكة "مبطّلة".
+
+PortFast بيحل المشكلة → يخلي البورت يشتغل في ثواني.
+
+
+⚠️ Note: PortFast should only be enabled on Access Ports
+   ===== not on Trunk links between switches, because it can create loops.
+___________________________________________________
+🔹 LACP (Link Aggregation Control Protocol)
+
+LACP is a standard protocol (IEEE 802.3ad) used to combine multiple physical links between two devices (like Switch ↔ Switch or Switch ↔ Server) and make them act as one logical link.
+
+In Cisco terminology, this is called EtherChannel.
+
+🔹 Why use it?
+
+Increase Bandwidth
+Example: If you have 2 × 1Gbps cables → bundle them with LACP → they work as a single 2Gbps link.
+
+Redundancy
+If one cable fails, traffic continues flowing through the remaining cables without network downtime.
+
+Load Balancing
+Traffic is distributed intelligently across the links (based on Source/Destination IP, MAC address, or Port).
+
+🔹 How does it work?
+
+LACP negotiates between the two devices to decide which physical links will join the bundle.
+
+It has two modes:
+
+Active: Actively sends LACP messages to initiate negotiation.
+
+Passive: Waits for LACP messages and responds.
+
+👉 At least one side must be Active for LACP to work.
+
+
+✅ الخلاصة
+
+LACP = Link Aggregation Control Protocol.
+
+بيجمع أكتر من كابل في Link واحد منطقي (EtherChannel).
+
+بيوفر Bandwidth + Redundancy + Load Balancing.
+___________________________________________________
+🔹 HSRP (Hot Standby Router Protocol)
+
+بروتوكول Cisco Proprietary (بيشتغل على أجهزة Cisco فقط).
+
+الفكرة: مجموعة Routers بيشاركوا Virtual IP Address واحد (Shared Gateway).
+
+واحد منهم بيبقى Active Router (بيستقبل الترافيك)، والتاني Standby Router (جاهز يشتغل لو الأساسي وقع).
+
+الـ Hosts في الشبكة ميعرفوش غير الـ Virtual IP (مش IP الحقيقي بتاع أي Router).
+
+Roles في HSRP:
+
+Active Router → اللي شغال وبيفورورد الترافيك.
+
+Standby Router → اللي واقف جاهز، أول ما Active يقع يمسك مكانه.
+
+Virtual IP & Virtual MAC → اللي الـ PCs شايفاه كـ Gateway.
+
+🔹 VRRP (Virtual Router Redundancy Protocol)
+
+بروتوكول Open Standard (IETF RFC 5798).
+
+شبه HSRP جدًا في الفكرة (Virtual IP, Routers sharing roles).
+
+مش محدود على Cisco → ممكن تشوفه في Cisco + Juniper + Huawei + MikroTik إلخ.
+
+بيستخدم concept اسمه:
+
+Master Router بدل Active.
+
+Backup Routers بدل Standby.
+
+___________________________________________________
+
+STP (Spanning Tree Protocol)
+
+Original protocol (IEEE 802.1D).
+
+Prevents loops in redundant Layer 2 networks.
+
+Ports go through states (Blocking → Listening → Learning → Forwarding).
+
+Convergence time is relatively slow (around 30–50 seconds).
+
+🔹 RSTP (Rapid Spanning Tree Protocol)
+
+An improved version of STP (IEEE 802.1w).
+
+Much faster convergence (1–10 seconds).
+
+Introduces new port roles: Edge Port, Root Port, Alternate, Designated.
+
+Better suited for modern networks that require fast recovery.
+
+✍️ ملخص صغير بالعربي
+
+الـ RSTP هو نفس فكرة الـ STP لكن أسرع بكتير في إعادة تشغيل الشبكة لو حصل مشكلة (من 30–50 ثانية في STP إلى 1–10 ثواني في RSTP).
+
+
+
+Classic STP uses 5 port states:
+
+Blocking → The port does not forward traffic but listens for BPDUs.
+
+Listening → The port listens to BPDUs and decides its role (Root/Designated/Blocked).
+
+Learning → The port starts building the MAC address table but still does not forward traffic.
+
+Forwarding → The port forwards traffic and continues learning MACs.
+
+Disabled → The port is administratively shut down.
+
+RSTP (Rapid Spanning Tree Protocol – IEEE 802.1w)
+
+RSTP simplifies port states into 3 only:
+
+Discarding → Combines Blocking + Listening + Disabled (no data forwarding).
+
+Learning → Builds the MAC address table.
+
+Forwarding → Actively forwards traffic.
+
+📝 الملخص بالعربي
+
+STP = 5 حالات (أبطأ → التحويل بياخد ~50 ثانية).
+
+RSTP = 3 حالات (أسرع جدًا → التحويل بياخد ثواني قليلة).
+
+
+
+
+___________________________________________________
+
+
+
+Root Guard : is an STP security feature that prevents a switch port from becoming a root port by blocking BPDUs that could change the root bridge election.
+
+
+
+
+
+
+BPDU Filter is an STP feature that stops sending and receiving BPDUs on a port.
+
+If applied on an access port, it prevents the port from participating in STP.
+
+Usually used together with PortFast to keep end devices (like PCs/Printers) from generating unnecessary STP traffic.
+
+
+Loop Guard is an STP feature that prevents a port from becoming forwarding if BPDUs stop being received.
+
+It is applied on non-designated ports (Root Port or Alternate Port).
+
+If the switch stops receiving BPDUs (maybe because of a unidirectional link failure), Loop Guard keeps the port in loop-inconsistent state instead of forwarding.
+
+This prevents Layer 2 loops.

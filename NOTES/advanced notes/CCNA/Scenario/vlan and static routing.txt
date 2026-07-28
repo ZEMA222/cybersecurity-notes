@@ -1,0 +1,195 @@
+Router 1:
+========
+
+enable
+conf t
+!
+int g0/0
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+exit
+!
+int g0/1
+ ip address 10.0.0.1 255.255.255.252
+ no shutdown
+exit
+!
+ip route 192.168.2.0 255.255.255.0 10.0.0.2
+end
+
+| الجزء           | معنى                                          |
+| --------------- | --------------------------------------------- |
+| `ip route`      | الأمر اللي بيحدد route جديد                   |
+| `192.168.2.0`   | الشبكة اللي عايز توصلها (destination network) |
+| `255.255.255.0` | Subnet Mask للشبكة دي                         |
+| `10.0.0.2`      | Next Hop IP أو الراوتر اللي هيوصل الشبكة دي   |
+
+
+Router 2:
+=========
+
+enable
+conf t
+!
+int g0/0
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+!
+int g0/1
+ ip address 192.168.2.1 255.255.255.0
+ no shutdown
+!
+ip route 192.168.1.0 255.255.255.0 10.0.0.1
+end
+
+
+
+
+
+
+
+
+
+Config PCs:
+
+PC0:
+
+IP: 192.168.1.2
+
+Mask: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+PC1:
+
+IP: 192.168.2.2
+
+Mask: 255.255.255.0
+
+Gateway: 192.168.2.1
+
+🔹 اختبار
+
+من PC0 → ping 192.168.2.2
+
+من PC1 → ping 192.168.1.2
+
+لو كل حاجة تمام هيشتغل. 🎉
+
+
+_______________________________________________________
+
+⚙️ الخطوات (CLI Configuration)
+1. على السويتش (Switch)
+Switch> enable
+Switch# configure terminal
+
+! إنشاء الـ VLANs
+Switch(config)# vlan 10
+Switch(config-vlan)# name Management
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 20
+Switch(config-vlan)# name Sales
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 30
+Switch(config-vlan)# name IT
+Switch(config-vlan)# exit
+
+
+! تحديد البورتات
+Switch(config)# interface fastEthernet 0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# exit
+
+Switch(config)# interface fastEthernet 0/3
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+Switch(config-if)# exit
+
+
+Switch(config)# interface fastEthernet 0/4
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 30
+Switch(config-if)# exit
+
+! بورت يروح للراوتر (Trunk)
+Switch(config)# interface fastEthernet 0/1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# exit
+
+
+✅ Router-on-a-Stick (بعد التظبيط)
+
+enable
+configure terminal
+
+! الانترفيس الأساسي (الموصل بالسويتش)
+interface fastEthernet 0/0
+no shutdown
+
+! 🔹 VLAN 10 - Management
+interface fastEthernet 0/0.10
+encapsulation dot1Q 10
+ip address 192.168.10.161 255.255.255.240
+
+! 🔹 VLAN 20 - Sales
+interface fastEthernet 0/0.20
+encapsulation dot1Q 20
+ip address 192.168.10.1 255.255.255.128
+
+! 🔹 VLAN 30 - IT
+interface fastEthernet 0/0.30
+encapsulation dot1Q 30
+ip address 192.168.10.129 255.255.255.224
+
+
+
+
+2. على الراوتر (Router) → Router-on-a-Stick
+Router> enable
+Router# configure terminal
+
+! الدخول على الانترفيس الموصل بالسويتش
+Router(config)# interface fastEthernet 0/0
+
+! Sub-interface للـ VLAN 10
+Router(config-subif)# interface fastEthernet 0/0.10
+Router(config-subif)# encapsulation dot1Q 10
+Router(config-subif)# ip address 192.168.10.1 255.255.255.0
+Router(config-subif)# no shutdown
+
+! Sub-interface للـ VLAN 20
+Router(config)# interface fastEthernet 0/0.20
+Router(config-subif)# encapsulation dot1Q 20
+Router(config-subif)# ip address 192.168.20.1 255.255.255.0
+Router(config-subif)# no shutdown
+
+3. على الـ PCs
+
+PC1 (VLAN 10):
+
+IP: 192.168.10.10
+
+Mask: 255.255.255.0
+
+Gateway: 192.168.10.1
+
+PC2 (VLAN 20):
+
+IP: 192.168.20.10
+
+Mask: 255.255.255.0
+
+Gateway: 192.168.20.1
+
+✅ الاختبار:
+
+جرب من PC1:
+
+ping 192.168.20.10
+
+
+لو الـ Config صح → هيشتغل عادي 🎉

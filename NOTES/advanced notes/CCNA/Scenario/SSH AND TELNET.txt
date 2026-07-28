@@ -1,0 +1,110 @@
+====================================================================
+SECTION 1: ROUTER R1 CONFIGURATION (TELNET & SSH)
+====================================================================
+
+! 1. Domain Name & RSA Key Generation (Required for SSH)
+R1(config)# ip domain-name lab.local
+R1(config)# crypto key generate rsa
+! When prompted for modulus size, type: 1024
+
+! 2. Set SSH Version 2
+R1(config)# ip ssh version 2
+
+! 3. Create Local Admin Account
+R1(config)# username admin privilege 15 secret admin123
+
+! 4. Configure VTY Lines for Telnet & SSH Access
+R1(config)# line vty 0 4
+R1(config-line)# transport input telnet ssh
+R1(config-line)# login local
+R1(config-line)# exit
+R1(config)# exit
+
+
+====================================================================
+SECTION 2: END-DEVICE IP CONFIGURATION (TASK 4)
+====================================================================
+
+[PC0 Settings]
+  - IP Address:       192.168.1.10
+  - Subnet Mask:      255.255.255.0
+  - Default Gateway:  192.168.1.1
+
+[PC3 Settings]
+  - IP Address:       192.168.2.10
+  - Subnet Mask:      255.255.255.0
+  - Default Gateway:  192.168.2.1
+
+
+====================================================================
+SECTION 3: TESTING REMOTE ACCESS
+====================================================================
+
+[Test Telnet from PC0 (Task 7)]
+  1. Open PC0 -> Desktop -> Command Prompt
+  2. Run command:
+     telnet 192.168.1.1
+  3. Log in with:
+     - Username: admin
+     - Password: admin123
+
+[Test SSH from PC3 (Task 8)]
+  1. Open PC3 -> Desktop -> Command Prompt (or Telnet/SSH Client)
+  2. Run command:
+     ssh -l admin 192.168.2.1
+  3. Log in with:
+     - Password: admin123
+
+
+====================================================================
+SECTION 4: VERIFICATION & SAVING CONFIGURATION (TASKS 9 & 10)
+====================================================================
+
+! Run these commands in R1 Privileged EXEC Mode (R1#):
+
+R1# show ip interface brief
+R1# show ip ssh
+R1# copy running-config startup-config
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------
+
+====================================================================
+ADD SSH TO R1 (PRESERVING EXISTING TELNET ACCESS)
+====================================================================
+
+Router> enable
+Router# configure terminal
+
+! 1. Set a domain name (Required for generating SSH keys)
+R1(config)# ip domain-name lab.local
+
+! 2. Generate RSA Key Pair for SSH encryption
+R1(config)# crypto key generate rsa
+! When prompted for key size/modulus, enter: 1024
+
+! 3. Enable SSH Version 2 (Recommended for security)
+R1(config)# ip ssh version 2
+
+! 4. Create a local user for SSH/Telnet authentication
+R1(config)# username admin privilege 15 secret admin123
+
+! 5. Update VTY Lines to allow BOTH Telnet and SSH
+R1(config)# line vty 0 4
+R1(config-line)# transport input telnet ssh
+R1(config-line)# login local
+R1(config-line)# exit
+R1(config)# exit
+
+! 6. Save the new configuration
+R1# copy running-config startup-config

@@ -1,0 +1,63 @@
+DHCP Summary
+
+1️⃣ Connect Devices
+Connect PCs and Server to the Switch using Copper Straight-Through cables.
+
+2️⃣ DHCP Server (Using a Server)
+
+Set server IP:
+
+IP: 192.168.1.1
+
+Subnet: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+Enable DHCP Service and configure:
+
+Pool Name: LAN
+
+Start IP: 192.168.1.10
+
+Subnet Mask: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+DNS: 8.8.8.8
+
+3️⃣ DHCP on Router
+enable
+conf t
+
+interface fa0/0
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+
+ip dhcp excluded-address 192.168.1.1
+
+ip dhcp pool LAN
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 8.8.8.8
+4️⃣ One DHCP for Multiple Networks
+
+You can use one DHCP server for multiple subnets, but you need:
+
+Separate DHCP pool for each subnet
+
+DHCP Relay (ip helper-address) on other routers.
+
+Example:
+
+ip dhcp pool LAN1
+network 192.168.1.0 255.255.255.0
+
+ip dhcp pool LAN2
+network 192.168.2.0 255.255.255.0
+
+Router relay:
+
+ip helper-address 10.0.0.1
+
+✅ Result:
+Each network receives IPs from its own DHCP pool, even if the server is in another network.

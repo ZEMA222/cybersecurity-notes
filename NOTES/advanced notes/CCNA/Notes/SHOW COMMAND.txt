@@ -1,0 +1,100 @@
+✅ Most important commands for labs:
+======================================
+
+show running-config
+show ip interface brief
+show ip route
+show ip nat translations
+show access-lists
+_______________________________________________________
+
+Common show Commands in Packet Tracer
+===================================
+
+1️⃣ Configuration Commands
+show running-config
+
+Displays the current configuration running on the device.
+
+show startup-config
+
+Displays the saved configuration that loads when the device restarts.
+
+2️⃣ Interface Information
+show ip interface brief
+
+Shows:
+
+All interfaces
+
+IP addresses
+
+Interface status (up/down)
+
+show interfaces
+
+Displays detailed information about all interfaces.
+
+show interfaces fastEthernet 0/0
+
+Shows details for one specific interface.
+
+3️⃣ Routing Information
+show ip route
+
+Displays the routing table.
+
+show ip protocols
+
+Shows information about routing protocols running on the router.
+
+4️⃣ DHCP Commands
+show ip dhcp binding
+
+Shows the devices that received IP addresses from DHCP.
+
+show ip dhcp pool
+
+Displays information about DHCP pools.
+
+5️⃣ NAT Commands
+show ip nat translations
+
+Displays NAT address translations (private ↔ public).
+
+show ip nat statistics
+
+Shows NAT statistics.
+
+6️⃣ Access Control Lists (ACL)
+show access-lists
+
+Displays all configured Access Control Lists.
+
+7️⃣ Switch Commands
+show mac address-table
+
+Shows the MAC address table of the switch.
+
+show vlan brief
+
+Displays all VLANs configured on the switch.
+
+8️⃣ General Device Information
+show version
+
+Displays:
+
+Device model
+
+IOS version
+
+Memory information
+
+show users
+
+Shows users currently connected to the device.
+
+show clock
+
+Displays the system time.
